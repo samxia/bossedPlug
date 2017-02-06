@@ -1,0 +1,63 @@
+var SaleData={
+		createNew:function()
+		{
+			var saleData={};
+			/**
+			 * fill up the summary data to sheet list datagrid.
+			 */
+			saleData.fillSaleSheetSummary2Datagrid=function()
+			{
+						$.ajax({
+							url: 'SaleSheetSummary/list',
+							type: 'POST',
+							dataType: 'json',
+							timeout: 100000,
+							success: function(result){
+								 $('#datagrid_sheet_open_list').datagrid('loadData',result);
+							}
+							
+						});
+			}
+			/**
+			 * open sale summary
+			 */
+			saleData.openSaleSheetItem=function(danHao,kehuNo)
+			{
+				$('#datagird_sale_item').datagrid('loading');
+				$.ajax({
+					//async:false,
+					url: 'SaleSheetSummary/open',
+					type: 'POST',
+					data:{danHao:danHao,kehuNo:kehuNo},
+					dataType: 'json',
+					timeout: 100000,
+					success: function(result){
+						//fill sale datagrid 
+						 $('#datagird_sale_item').datagrid('loadData',result);
+						 
+						 //summary
+						 var summary=result.summary;
+						 $('#sale_sheet_dan_hao').val(summary.danhao);
+						 $('#sale_sheet_date').datetimebox('setValue',summary.date);
+						 $('#sale_sheet_cangku').combobox('setValue', summary.cangKu);
+						 $('#sale_sheet_beizhu').val(summary.beizhu);
+						 $('#fapiao_leixing').combobox('setValue', summary.faPiaoLeiXing);
+						 //ying shou huo kuan
+						 var yshk=result.yshk;
+						 $('#sale_sheet_cqqkze').val(yshk.yshQM);
+						 
+						 //kehu
+						 var kehu=result.kehu;
+						 $('#sale_sheet_kehuNo').val(kehu.kehuNo);
+						 $('#sale_sheet_lxr').val(kehu.kehuXm);
+						 $('#sale_sheet_name').val(kehu.kehuMc);
+						 $('#sale_sheet_tel').val(kehu.kehuDh);
+
+
+					}
+					
+				});
+			}
+			return saleData;
+		}
+};

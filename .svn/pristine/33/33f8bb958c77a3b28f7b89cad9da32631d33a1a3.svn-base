@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Show Picture</title>
+<script type="text/javascript" src="../js/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="../js/util/util.js"></script>
+</head>
+<body onload="onLoad()">
+<script type="text/javascript">
+	function onLoad()
+	{
+		var title=decodeURIComponent(utilGetQueryString("title"));
+		
+		$('#image').attr("src",utilGetQueryString("path"));
+		$('#image').attr("alt",title);
+		$('#image').attr("title",title);
+		//alert(utilGetQueryString("path"));
+	}
+</script>
+	<style type="text/css">
+* {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+a,img {
+	border: 0;
+}
+
+body {
+	overflow: hidden;
+	font: 12px/180% Arial, Helvetica, sans-serif, "新宋体";
+}
+/* shortcut */
+.shortcut {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 9999;
+	width: 100%;
+}
+
+* html,* html body /* 修正IE6振动bug */ {
+	background-image: url(about:blank);
+	background-attachment: fixed;
+}
+
+* html .shortcut {
+	position: absolute;
+	top: expression(eval(document.documentElement.scrollTop) );
+}
+
+.shortcut {
+	height: 26px;
+	background: #EEEEEE;
+	box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.2);
+	border-bottom: 1px solid #DDDDDD;
+	padding: 5px 0 0 0;
+}
+
+.shortcut li {
+	float: left;
+	cursor: pointer;
+	margin: 5px 0 0 5px;
+	display: inline;
+}
+/* #picbbox */
+.down_showpic {
+	overflow: hidden;
+	width: auto; 
+	text-align: center;
+}
+
+.pictio {
+	position: absolute;
+	z-index: 1;
+	background-color: #666;
+	cursor: move;
+}
+</style>
+
+	<div class="shortcut">
+		<ul>
+			<li class="arc_push1"><img src="../images/ckyt-btn.gif" width="60"
+				height="18" alt="查看原图" /></li>
+			<li class="arc_push2"><img src="../images/sypm-btn.gif" width="60"
+				height="18" alt="适应屏幕" /></li>
+			<li class="arc_push5"><img src="../images/sykd-btn.gif" width="60"
+				height="18" alt="适应宽度" /></li>
+		</ul>
+	</div>
+
+	<div id="picbbox">
+		<div class="down_showpic">
+			<img src="../picture/files/contacts_53/TJSYFQCSD_3.jpg" alt="微笑的美丽说" title="微笑的美丽说" id="image"/>
+			<div class="pictio"></div>
+		</div>
+	</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".down_showpic").css("width",$(window).width());
+	$(window).resize(function(){
+		$(".down_showpic").css("width",$(window).width());
+		$(".pictio").width($("#picbbox").width()).height($("#picbbox").height());
+	});
+});
+
+var p_w;
+var p_h;
+$(".down_showpic>img").load(function(){
+	p_w=$(this).width();
+	p_h=$(this).height();
+	$(".pictio").width($("#picbbox").width()).height($("#picbbox").height()).css({top:$(this).position().top,left:0}).fadeTo(100, 0.05);
+})
+dragpic=-1;
+dragpicy=-1;
+$(".pictio").bind({
+	mousedown: function(e){
+		//e=event?event:window.event;
+		dragpic=e.pageX || (e.clientX);
+		dragpicy=e.pageY || (e.clientY);
+		if (e.stopPropagation){ 
+			// this code is for Mozilla and Opera 
+			e.stopPropagation(); 
+			e.preventDefault();
+		};
+	},
+	mouseup: function(){
+		dragpic=-1;
+	},mousemove: function(e){
+		if(dragpic>=0){
+			//e=event?event:window.event;
+			dqsb=e.pageX || (e.clientX );
+			dqsby=e.pageY || (e.clientY );
+			$(".down_showpic").scrollLeft($(".down_showpic").scrollLeft()+(dragpic-dqsb))
+			$(document).scrollTop($(document).scrollTop()+(dragpicy-dqsby))
+			dragpic=dqsb
+			dragpicy=dqsby
+		}
+	},mouseout: function(){
+		dragpic=-1;
+	}
+});
+
+$(".arc_push1").click(function(){
+	$(".pictio").width($("#picbbox").width()).height($("#picbbox").height());
+	$(".down_showpic>img").css({"width":"auto","height":"auto"});
+	$(document).scrollTop($(".down_showpic").position().top);
+	return false;
+});
+
+$(".arc_push2").click(function(){
+	w=p_w;
+	h=p_h;
+	boxw=$(window).width()
+	boxh=$(window).height()
+	$(".pictio").width(boxw).height(boxh-$(".downbom").height());
+	if(w<boxw && h<boxh){
+	}else{
+		if((w/h)>(boxw/boxh)){
+			$(".down_showpic>img").css({"width":boxw,height:"auto"});
+		}else{
+			//$(".down_showpic>img").css("width",boxw);
+			$(".down_showpic>img").css({"width":"auto","height":boxh-$(".downbom").height()});
+			
+		}
+	}
+	$(document).scrollTop($(".down_showpic").position().top);
+	return false;
+});
+
+$(".arc_push5").click(function(){
+	w=p_w;
+	h=p_h;
+	boxw=$(window).width()
+	boxh=$(window).height()
+	$(".pictio").width($("#picbbox").width()).height($("#picbbox").height());
+	if(w<boxw){
+		
+	}else{
+		$(".down_showpic>img").css({"width":boxw,height:"auto"});
+	}
+	$(document).scrollTop($(".down_showpic").position().top);
+	return false;
+});
+</script>
+
+</body>
+</html>

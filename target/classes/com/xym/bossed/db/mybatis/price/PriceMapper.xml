@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xym.bossed.db.mybatis.price.PriceMapper">
+<select id="selectSalePriceRefer" statementType="CALLABLE" parameterType="java.util.Map" resultType="com.xym.bossed.db.mybatis.price.PriceRefer">
+
+	{call sp_searchpricenew(#{kehuNo,jdbcType=VARCHAR,mode=IN}, #{partsNo,jdbcType=VARCHAR,mode=IN}, #{cangkDm,jdbcType=VARCHAR,mode=IN},1)} 
+	
+
+select xiao_id as id,price_desc as priceDesc,jiag,yewu_dh as yewuDh,yewu_rq as yewuRq
+	 from info_price 
+     where  xiao_id=4 or xiao_id=5 or xiao_id=6 or xiao_id=1 or xiao_id=2
+     or xiao_id=3 or xiao_id=7 or xiao_id=8 or xiao_id=9 or xiao_id=10 or xiao_id=11 
+     or xiao_id=12 or xiao_id=13 or xiao_id=14 
+	 order by xiao_id;
+</select>
+   
+</mapper>

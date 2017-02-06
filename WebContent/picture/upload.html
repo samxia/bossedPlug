@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css"
+	href="../js/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css"
+	href="../js/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="../js/easyui/demo/demo.css">
+<script type="text/javascript" src="../js/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="../js/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/util/util.js"></script>
+</head>
+<body onload="onLoad()">
+<div id="div_form">
+	<form id="form_pic_upload" method="POST" enctype="multipart/form-data"
+		action="../pic/create">
+		<div>
+			ID： <input type="text" id="id_owner_id" readonly="readonly"/>
+		</div>
+		<div>	
+			Folder：<input type="text" id="id_owner_name" readonly="readonly"/>
+		</div>
+		<div>
+			图片：<input class="easyui-validatebox" type="file" name="files[]"
+				id="fileName" data-options="required:true"></input>
+		</div>
+		<div>
+			说明：<!-- <input class="easyui-validatebox" type="text" name="memo"
+				id="id_memo" multiple="multiple"> -->
+				<textarea rows="2" cols="30" id="id_memo"></textarea>
+		</div>
+		<div>
+			<button type="submit">上传</button>
+		</div>
+	</form>
+	</div>
+	<div id="id_msg"></div>
+	<div id="div_GoOn" hidden="true"><a href="#" onclick="$('#div_form').show();$('#div_GoOn').hide();return false;">继续上传</a></div>
+	<div>
+	<iframe id="iframe_view" src="" width="100%"
+				height="500" marginheight="0" marginwidth="0" scrolling="no"
+				frameborder="no" align="middle"></iframe>
+	</div>
+	<script type="text/javascript">
+	var ownerId,ownerName;
+	function onLoad()
+	{
+		 ownerId=utilGetQueryString("owner_id");
+		 ownerName=utilGetQueryString("owner_name");
+		 $("#id_owner_id").attr("value",ownerId);
+		 $("#id_owner_name").attr("value",ownerName);
+		 
+	}
+	
+    $('#form_pic_upload').form({
+        
+		onSubmit: function(){
+
+			if(ownerId==null || ownerName==null)
+			{
+				$("#id_msg").html("<font color=red>owner ID or Name is null.</font>");
+				return false;
+			}
+			
+			$('#form_pic_upload').attr("action","../pic/create?owner_id="+ownerId+"&owner_name="+ownerName+"&memo="+escape(encodeURIComponent($("#id_memo").val())));
+			
+			if(!$('#form_pic_upload').form('validate'))
+			{
+				return false;
+			}
+		
+			//alert($('#id_owner_id').val());
+			//return false;
+		},
+		success:function(data){
+			if(data.indexOf("success:")==-1)
+			{
+				//data=data.replace("location.replace(str_url_redirect);","");
+			  // $("#id_msg").html("请先<a href='../login/login.html'>登录</a>");
+			  $("#id_msg").html(data);
+				return;
+			}
+			//if success
+			$("#iframe_view").attr("src","view.html?owner_id="+ownerId);
+
+			$("#div_form").hide();
+			$("#div_GoOn").show();
+		  // alert(data);
+		}
+		});
+	
+	</script>
+</body>
+</html>

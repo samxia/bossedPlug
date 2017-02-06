@@ -1,0 +1,15 @@
+<html>
+<script type="text/javascript">
+getIP=function(){
+	var fso = new ActiveXObject("Scripting.FileSystemObject");
+	var wsh = new ActiveXObject("WScript.Shell");
+	wsh.Run("command.com  /c ipconfig /all > C://ip.txt");
+	var f = fso.OpenTextFile("C://ip.txt");
+	var s = f.ReadAll();
+	f.Close();
+	document.write(s);
+	alert(s.match(/IP Address(/.)+/:((/d{1,3}/.){3}(/d{1,3}))/)[0]);
+}
+</script>
+<body></body>
+</html>

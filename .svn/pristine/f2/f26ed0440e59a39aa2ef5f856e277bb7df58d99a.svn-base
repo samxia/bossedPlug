@@ -1,0 +1,11 @@
+package com.xym.bossed.db.mybatis.sale;
+
+import java.util.List;
+
+public interface SaleMapper {
+	public List<SaleSheetSummary> getAllSaleSheetSummary();
+	public SaleSheetSummary getSaleSheetSummaryByDanHao(String danHao);
+	public List<PartsItem> getTempPartsItemByDanHao(String danHao);
+	public int updateTempPartsItemFlagSLToZeroIfNullByDanHao(String danHao);
+	public int deleteSaleSheetByDanHao(String danHao);
+}

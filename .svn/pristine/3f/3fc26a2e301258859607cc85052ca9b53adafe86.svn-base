@@ -1,0 +1,61 @@
+package com.xym.bossed.db.mybatis.yshk;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+public class YingShouHuoKuanBean {
+	private String kehuNo;
+	private Date yshRiQi;
+
+	private BigDecimal yshQF, yshJF, yshDF, yshQM;
+
+	public String getKehuNo() {
+		return kehuNo;
+	}
+
+	public void setKehuNo(String kehuNo) {
+		this.kehuNo = kehuNo;
+	}
+
+	public Date getYshRiQi() {
+		return yshRiQi;
+	}
+
+	public void setYshRiQi(Date yshRiQi) {
+		this.yshRiQi = yshRiQi;
+	}
+
+	public BigDecimal getYshQF() {
+		return yshQF;
+	}
+
+	public void setYshQF(BigDecimal yshQF) {
+		this.yshQF = yshQF;
+	}
+
+	public BigDecimal getYshJF() {
+		return yshJF;
+	}
+
+	public void setYshJF(BigDecimal yshJF) {
+		this.yshJF = yshJF;
+	}
+
+	public BigDecimal getYshDF() {
+		return yshDF;
+	}
+
+	public void setYshDF(BigDecimal yshDF) {
+		this.yshDF = yshDF;
+	}
+
+	public BigDecimal getYshQM() {
+		return yshQM;
+	}
+
+	public void setYshQM(BigDecimal yshQM) {
+		this.yshQM = yshQM;
+	}
+
+	 
+}

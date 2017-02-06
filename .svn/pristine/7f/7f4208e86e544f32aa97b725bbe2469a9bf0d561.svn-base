@@ -1,0 +1,39 @@
+package com.xym.bossed.service;
+
+import java.util.List;
+
+import com.xym.bossed.db.mybatis.picture.Picture;
+import com.xym.bossed.db.mybatis.picture.PictureDAO;
+import com.xym.bossed.db.mybatis.picture.PictureExample;
+
+public class PictureService {
+
+	public int createPicture(Picture picture) {
+		PictureDAO dao = new PictureDAO();
+		return dao.insertSelective(picture);
+	}
+
+	public int deletePictureById(int id) {
+		PictureDAO dao = new PictureDAO();
+		PictureExample e = new PictureExample();
+		e.or().andIdEqualTo(id);
+		return dao.deleteByExample(e);
+	}
+
+	public int updatePicture(Picture picture) {
+		PictureDAO dao = new PictureDAO();
+		return dao.updateByPrimaryKeySelective(picture);
+	}
+
+	public List<Picture> getAllPictures() {
+		PictureDAO dao = new PictureDAO();
+		return dao.selectByExample(new PictureExample());
+	}
+
+	public List<Picture> getPicturesByOwnerId(String owner_id) {
+		PictureDAO dao = new PictureDAO();
+		PictureExample pe = new PictureExample();
+		pe.or().andOwnerIdEqualTo(owner_id);
+		return dao.selectByExample(pe);
+	}
+}

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xym.bossed.db.mybatis.sale.SaleMapper">
+<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+<!--  date, danhao, mingcheng, xingming, shuliangSum, hsjineSum,
+			deptMc, jingbanren, caozuoyuan, beizhu, mingchengDp, xingmingDp> -->
+<resultMap type="com.xym.bossed.db.mybatis.sale.SaleSheetSummary" id="SaleSheetSummaryResultMap">
+	<result column="xiao_rq" property="date" jdbcType="VARCHAR" />
+	<result column="xiao_no" property="danhao" jdbcType="VARCHAR" />
+	<result column="kehu_mc" property="mingcheng" jdbcType="VARCHAR" />
+	<result column="kehu_xm" property="xingming" jdbcType="VARCHAR" />
+	<result column="xiao_sl_sum" property="shuliangSum" jdbcType="VARCHAR" />
+	<result column="Xiao_hsje_sum" property="hsjineSum" jdbcType="VARCHAR" />
+	<result column="dept_mc" property="deptMc" jdbcType="VARCHAR" />
+	<result column="Xiao_jb" property="jingbanren" jdbcType="VARCHAR" />
+	<result column="Xiao_czy" property="caozuoyuan" jdbcType="VARCHAR" />
+	<result column="xiao_bz" property="beizhu" jdbcType="VARCHAR" />
+	<result column="kehu_dp" property="mingchengDp" jdbcType="VARCHAR" />
+	<result column="kehu_lp" property="xingmingDp" jdbcType="VARCHAR" />
+	<result column="kehu_no" property="kehuNo" jdbcType="VARCHAR" />
+	<result column="cangk_dm" property="cangKu" jdbcType="VARCHAR" />
+	<result column="xiao_fp_lx" property="faPiaoLeiXing" jdbcType="VARCHAR" />
+	<result column="xiao_jsfs" property="jieSuanFangShi" jdbcType="VARCHAR"/>
+</resultMap>
+<resultMap type="com.xym.bossed.db.mybatis.sale.PartsItem" id="PartsItemResultMap">
+<!-- private String bianMa, mingCheng, english, cheXing, pinPai, beiZhu, tuHao,
+			cangKu, tongYongCheXing, chanDi, tongYongJianHao, jinKou,
+			tiaoXingMa,danWei;
+	private Double buHanShuiDanJia, yuanHanShuiDanJia, hanShunJinE,
+			buHanShuiJinE, shuiE, hanShuiJinE, shuiLv, canKaoJiaGe,
+			kaiDanJiaGe, kaiDanJinE, shuLiang, benKuXianKuCunShu; -->
+	<result column="list_no" property="danHao" jdbcType="VARCHAR" />
+	<result column="peij_no" property="bianMa" jdbcType="VARCHAR" />
+	<result column="peij_th" property="tuHao" jdbcType="VARCHAR" />
+	<result column="peij_mc" property="mingCheng" jdbcType="VARCHAR" />
+	<result column="peij_en" property="english" jdbcType="VARCHAR" />
+	<result column="peij_dw" property="danWei" jdbcType="VARCHAR" />
+	<result column="peij_jk" property="jinKou" jdbcType="VARCHAR" />
+	<result column="peij_cx" property="cheXing" jdbcType="VARCHAR" />
+	<result column="peij_cd" property="chanDi" jdbcType="VARCHAR" />
+	<result column="peij_pp" property="pinPai" jdbcType="VARCHAR" />
+	<result column="peij_th_ty" property="tongYongJianHao" jdbcType="VARCHAR" />
+	<result column="peij_cx_ty" property="tongYongCheXing" jdbcType="VARCHAR" />
+	<result column="peij_sl" property="shuLiang" jdbcType="DECIMAL" />
+	<result column="peij_dj_bh" property="buHanShuiDanJia" jdbcType="DECIMAL" />
+	<result column="peij_dj_hs" property="hanShuiDanJia" jdbcType="DECIMAL" />
+	<result column="peij_bhje" property="buHanShuiJinE" jdbcType="DECIMAL" />
+	<result column="peij_hsje" property="hanShuiJinE" jdbcType="DECIMAL" />
+	<result column="peij_se" property="shuiE" jdbcType="DECIMAL" />
+	<result column="peij_fplv" property="shuiLv" jdbcType="DECIMAL" />
+	<result column="cangku_dm" property="changKuDaiMa" jdbcType="VARCHAR" />
+	<result column="peij_bz" property="beiZhu" jdbcType="VARCHAR" />
+	<result column="yewu_dh" property="yeWuDanHao" jdbcType="VARCHAR" />
+	<result column="yewu_mx" property="yeWuMX" jdbcType="DECIMAL" />
+	<result column="chengb_dj" property="jinJia" jdbcType="DECIMAL" />
+	<result column="chengb_je" property="jinHuoJinE" jdbcType="DECIMAL" />
+	<result column="peij_hw" property="huoWei" jdbcType="VARCHAR" />
+	<result column="peij_tiaoma" property="tiaoMa" jdbcType="VARCHAR" />
+	<result column="peij_kdj" property="kaiDanJiaGe" jdbcType="DECIMAL" />
+	<result column="peij_kdje" property="kaiDanJinE" jdbcType="DECIMAL" />
+	<result column="peij_dj_hs_old" property="yuanHanShuiDanJia" jdbcType="DECIMAL" />
+	<result column="Pand_SL" property="dianHuoShuLiang" jdbcType="DECIMAL" />
+	<result column="Pand_rq" property="dianHuoRiQi" jdbcType="DATE" />
+	<result column="CanUse_Sl" property="keYongLiang" jdbcType="DECIMAL" />
+	<result column="tiaoma_Sl" property="tiaoMaSL" jdbcType="DECIMAL" />
+</resultMap>
+<select id="getAllSaleSheetSummary" resultMap="SaleSheetSummaryResultMap">
+	select X.xiao_rq,X.xiao_no,k.kehu_mc,k.kehu_xm,
+	X.xiao_sl_sum,X.Xiao_hsje_sum,X.xiao_fp_lx,xiao_jsfs,
+	X.dept_mc,X.Xiao_jb,X.Xiao_czy,x.xiao_bz,k.kehu_dp,k.kehu_lp,k.kehu_no
+	from Xiaosh_pz_gz x,
+	(select b.* from  (select kehu_no from kehu  union all  select '' as kehu_no) a  
+	left join kehu b on a.kehu_no = b.kehu_no) k
+	where x.kehu_no = isnull(k.kehu_no,'') 
+</select>
+<select id="getSaleSheetSummaryByDanHao" parameterType="java.lang.String" resultMap="SaleSheetSummaryResultMap">
+	SELECT *
+	FROM xiaosh_pz_gz
+	WHERE xiao_no =#{danHao}
+</select>
+<select id="getTempPartsItemByDanHao" parameterType="java.lang.String" resultMap="PartsItemResultMap">
+	select * from list_temp_mx Where list_no=#{danHao}
+</select>
+<update id="updateTempPartsItemFlagSLToZeroIfNullByDanHao" parameterType="java.lang.String">
+	update list_temp_mx set 
+	flag_sl = isnull((select peij_kc from kucshp_fl k where k.peij_no = l.peij_no and k.cangk_dm = l.cangk_dm ),0) 
+	from list_temp_mx l 
+	where list_no = #{danHao}
+</update>
+
+</mapper>

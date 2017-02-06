@@ -1,0 +1,9 @@
+package com.xym.bossed.interfaces;
+
+import java.util.ArrayList;
+import java.util.Date;
+
+public interface IFapiaoService {
+	public ArrayList listAllFapiao();
+	public ArrayList listFapiaoByDate(Date start,Date end);
+}

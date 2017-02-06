@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<!-- For getting applicationContext -->
+	<bean id="springUtil" class="com.xym.bossed.util.SpringUtil" />
+
+	<bean id="saleService" class="com.xym.bossed.service.SaleService" />
+	<bean id="partsService" class="com.xym.bossed.service.PartsService" />
+
+	<bean id="partsFenLuService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces">
+			<value>com.xym.bossed.interfaces.IPartsFenLuService</value>
+		</property>
+		<property name="target">
+			<ref local="partsFenLuServiceTarget" />
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>partsFenLuAfterAdvisor</value>
+			</list>
+		</property>
+	</bean>
+	<bean name="partsFenLuAfterAdvisor"
+		class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+		<property name="advice">
+			<ref local="partsFenLuAfterAdvice" />
+		</property>
+		<property name="pattern">
+			<value>.*</value>
+		</property>
+	</bean>
+	<bean id="partsFenLuServiceTarget" class="com.xym.bossed.service.PartsFenLuService" />
+	<bean id="partsFenLuAfterAdvice" class="com.xym.bossed.authority.PartsFenLuAfterAdvice" />
+</beans>

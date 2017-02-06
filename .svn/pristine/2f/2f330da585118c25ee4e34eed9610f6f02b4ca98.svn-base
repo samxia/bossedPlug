@@ -1,0 +1,10 @@
+<servlet>
+	<description></description> 
+	<display-name>DepartmentList</display-name>
+	<servlet-name>DepartmentList</servlet-name>
+	<servlet-class>com.xym.bossed.servlet.dept.DepartmentList</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>DepartmentList</servlet-name>
+	<url-pattern>/dept/list</url-pattern>
+</servlet-mapping>

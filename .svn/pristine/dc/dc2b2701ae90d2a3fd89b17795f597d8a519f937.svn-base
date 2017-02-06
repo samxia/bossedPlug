@@ -1,0 +1,14 @@
+package com.xym.bossed.ws.interfaces;
+
+import java.util.Date;
+import java.util.List;
+
+import javax.jws.WebService;
+
+import com.xym.bossed.db.mybatis.log.Log;
+
+@WebService
+public interface ILogWebService {
+    public List<Log> getLogListByStartDate(Date date);
+    public List<Log> getLogListByStartDateAndChannel(Date date, String channel);
+}

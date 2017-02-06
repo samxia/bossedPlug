@@ -1,0 +1,5 @@
+copy /Y D:\Workspaces_MyEclipse\bossedPlug\target\classes\applet\Camera.class D:\Workspaces_MyEclipse\bossedPlug\WebContent\applet\applet
+
+jar -cvf jarApplet.jar *.class
+jarsigner -keystore MyApplet.store jarApplet.jar MyApplet
+pause

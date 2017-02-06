@@ -1,0 +1,19 @@
+var PartsSelector={
+		createNew:function(){
+			var partsSelector={};
+			//init parts selector
+			partsSelector.init=function(){
+				//clear button binds
+				$('#button_parts_selector_clear').bind('click',partsSelector.clear);
+				// close button,in parts selector window
+				$('#button_parts_selector_close').bind('click', function() {
+					$('#win_parts_selector').window('close');
+				});
+			};
+			//clear button
+			partsSelector.clear=function(){
+				$('#div_parts_selector_input_area input').val('');
+			};
+			return partsSelector;
+		}
+};

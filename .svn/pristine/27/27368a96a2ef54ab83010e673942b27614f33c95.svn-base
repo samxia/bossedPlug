@@ -1,0 +1,37 @@
+package com.xym.bossed.service;
+
+import java.util.Date;
+import java.util.List;
+
+import com.xym.bossed.db.mybatis.fapiao.FaPiao;
+import com.xym.bossed.db.mybatis.fapiao.FaPiaoDAO;
+import com.xym.bossed.db.mybatis.fapiao.FaPiaoExample;
+import com.xym.bossed.interfaces.IFapiaoService;
+
+public class FaPiaoService implements IFapiaoService {
+
+	@Override
+	public List<FaPiao> listAllFapiao() {
+		FaPiaoDAO dao = new FaPiaoDAO();
+		FaPiaoExample exa = new FaPiaoExample();
+		exa.or().getAllCriteria();
+		return dao.selectByExample(exa);
+	}
+
+	@Override
+	public List<FaPiao> listFapiaoByDate(Date start, Date end, String str_state) {
+		FaPiaoDAO dao = new FaPiaoDAO();
+		FaPiaoExample exa = new FaPiaoExample();
+		if (str_state.trim().equalsIgnoreCase("")) {
+			exa.or().andKaipRqBetween(start, end);
+		} else {
+			exa.or()
+					.andKaipRqBetween(start, end)
+					.andKaipValidityEqualTo(
+							"true".equalsIgnoreCase(str_state) ? true : false);
+		}
+
+		return dao.selectByExample(exa);
+	}
+
+}

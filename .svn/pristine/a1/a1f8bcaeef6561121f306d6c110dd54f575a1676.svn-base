@@ -1,0 +1,103 @@
+package com.xym.bossed.db.mybatis.procedure;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import com.xym.bossed.db.mybatis.SQLFactory;
+
+public class ProcedureDAO {
+	/**--------------------Below is the procedure------------
+	 * --             要删除信息
+--  @info_no   要删除的属性信息
+--  @info_type 要删除的属性信息的类型
+CREATE    PROCEDURE [sp_proinfo_delete]  
+  @info_no    Varchar(20),
+  @info_type  int
+AS
+ IF @info_type = 1101 --删除配件 
+ BEGIN
+   IF (SELECT COUNT(*) FROM kucshp_fl WHERE peij_no = @info_no and peij_kc <> 0 ) > 0      Return(11011)
+ END ELSE IF @info_type = 1102  --删除客户
+ BEGIN
+   IF (SElECT COUNT(*) FROM work_cheliang_sm    where kehu_no = @info_no)  > 0   Return(11023)------------swj 有车不让删
+   IF (SELECT COUNT(*) FROM yshk_zz where kehu_no = @info_no) > 0         Return(11021)
+   IF (SELECT COUNT(*) FROM fapiao_kp_pz where kehu_no = @info_no)  > 0   Return(11022) 
+   IF (SElECT COUNT(*) FROM kucshp_mx    where kehu_no = @info_no)  > 0   Return(11023)
+   IF (SElECT COUNT(*) FROM xiaosh_pz_gz where kehu_no = @info_no)  > 0   Return(11023)
+   IF (SElECT COUNT(*) FROM xiaoth_pz_gz where kehu_no = @info_no)  > 0   Return(11023)
+   IF (SElECT COUNT(*) FROM suijsuix_pz_gz where kehu_no = @info_no)  > 0 Return(11023)
+ END ELSE IF @info_type = 1103  --删除供应商 
+ BEGIN
+   IF (SELECT COUNT(*) FROM yfk_zz WHERE kehu_no = @info_no) > 0             RETURN(11031) 
+   IF (SELECT COUNT(*) FROM fapiao_shp_pz WHERE kehu_no = @info_no) > 0      RETURN(11033) 
+   IF (SElECT COUNT(*) FROM kucshp_mx    where kehu_no = @info_no)  > 0      Return(11033)
+   IF (SElECT COUNT(*) FROM jinhuo_pz_gz where kehu_no = @info_no)  > 0      Return(11033)
+   IF (SElECT COUNT(*) FROM caigth_pz_gz where kehu_no = @info_no)  > 0      Return(11033)
+   IF (SElECT COUNT(*) FROM suijsuix_pz_gz where gysh_no = @info_no)  > 0    Return(11033)	
+ END ELSE IF @info_type = 1104  --工作人员liming 
+ BEGIN
+  IF (SELECT COUNT(*) FROM yfk_mx WHERE  yfk_jb = @info_no) > 0      RETURN(0) 
+   --暂时改为任何时候都能删除。
+   --IF (SELECT COUNT(*) FROM yfk_mx WHERE  yfk_jb = @info_no) > 0      RETURN(11041) 
+   --IF (SELECT COUNT(*) FROM jinhuo_pz_sj WHERE jinh_jb = @info_no) > 0      RETURN(11042) 
+   --IF (SELECT COUNT(*) FROM rukudan_pz_sj WHERE ruku_jb = @info_no) > 0      RETURN(11043) 
+ END ELSE IF @info_type = 1105  --车型
+ BEGIN
+   IF (SELECT COUNT(*) FROM kucshp_info WHERE  peij_cx = @info_no) > 0      RETURN(11051) 
+ END ELSE IF @info_type = 1106   --发票类型liming
+ BEGIN
+   --IF (SELECT COUNT(*) FROM kucshp_info WHERE  peij_cx = @info_no) > 0      RETURN(11061) 
+   RETURN(0) 
+ END ELSE IF @info_type = 1107   --出入库类别
+ BEGIN
+   IF (SELECT COUNT(*) FROM kucshp_mx WHERE  chru_zy = @info_no) > 0      RETURN(11071) 
+ END ELSE IF @info_type = 1108   --费用项目
+ BEGIN
+   IF (SELECT COUNT(*) FROM kucshp_mx WHERE  chru_zy = @info_no) > 0      RETURN(11081) 
+ END ELSE IF @info_type = 1109   --???
+ BEGIN
+   print '?????'
+ END ELSE IF @info_type = 1110  --是否可以删除一个公司
+ BEGIN
+   IF (SELECT COUNT(*) FROM kucshp_mx Where danw_dm = @info_no) > 0  return(11101)
+ END ELSE IF @info_type = 1111  --是否可以删除一个仓库
+ BEGIN
+   IF (SELECT COUNT(*) FROM kucshp_fl Where cangk_dm = @info_no) > 0 return(11111)
+ END ELSE IF @info_type = 1112  --是否可以结算方式
+ BEGIN
+   IF ((SELECT COUNT(*) FROM yfk_mx where yfk_jsfs = @info_no) > 0 ) or ((SELECT COUNT(*) FROM yshk_mx where shk_jsfs = @info_no) > 0 ) 
+      return(11121)
+ END ELSE IF @info_type = 1113  --部门
+ BEGIN
+   IF (SELECT COUNT(*) FROM yfk_mx where yfk_jsfs = @info_no) > 0 return(11131)
+ END   
+RETURN(0)
+
+
+GO
+
+	 * @param param
+	 * @param info_type
+	 * @return
+	 */
+	public int checkBeforeDelete(String param, int info_type) {
+		Object obj = null;
+		SqlSession session = SQLFactory.getFactory().openSession();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("info_no", param);
+		map.put("info_type", info_type);
+		try {
+			obj = session
+					.selectOne(
+							"com.xym.bossed.db.mybatis.procedure.ProcedureMapper.check_before_delete",
+							map);
+		} finally {
+			session.close();
+		}
+		return (Integer) obj;
+	}
+}

@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>批量导入发票</title>
+</head>
+<body>导入
+1.上传 
+2.java读取csv
+3.插入到数据库（取得开票号码）
+</body>
+</html>

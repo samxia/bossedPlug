@@ -1,0 +1,29 @@
+<servlet>
+		<display-name>authContactsCategoryList</display-name>
+		<servlet-name>authContactsCategoryList</servlet-name>
+		<servlet-class>com.xym.bossed.servlet.auth.contacts.CategoryList</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>authContactsCategoryList</servlet-name>
+	<url-pattern>/auth/contacts/categoryList</url-pattern>
+</servlet-mapping>
+
+<servlet>
+		<display-name>GetExcludeCategoryByRoleId</display-name>
+		<servlet-name>GetExcludeCategoryByRoleId</servlet-name>
+		<servlet-class>com.xym.bossed.servlet.auth.contacts.GetExcludeCategoryByRoleId</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>GetExcludeCategoryByRoleId</servlet-name>
+	<url-pattern>/auth/contacts/getExcludeCategoryByRoleId</url-pattern>
+</servlet-mapping>
+
+<servlet>
+		<display-name>ExcludedCategorySave</display-name>
+		<servlet-name>ExcludedCategorySave</servlet-name>
+		<servlet-class>com.xym.bossed.servlet.auth.contacts.ExcludedCategorySave</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>ExcludedCategorySave</servlet-name>
+	<url-pattern>/auth/contacts/excludedCategorySave</url-pattern>
+</servlet-mapping>

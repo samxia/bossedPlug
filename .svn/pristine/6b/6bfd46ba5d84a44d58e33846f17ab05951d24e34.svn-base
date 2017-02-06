@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css"
+	href="../js/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css"
+	href="../js/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="../js/easyui/demo/demo.css">
+<script type="text/javascript" src="../js/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="../js/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/easyui/datagrid-detailview.js"></script>
+</head>
+<body>
+	<table id="dg" style="width: 700px; height: 500px" title="Picture"
+		singleSelect="true"  url="../pic/query?owner_id=">
+		<thead>
+			<tr>
+				<th field="kehuMc" width="80">名称</th>
+				<th field="ownerId" width="600">Owner ID</th>
+			</tr>
+		</thead>
+	</table>
+	<script type="text/javascript">
+	$(function(){
+			$('#dg').datagrid({
+			view: detailview,
+			detailFormatter:function(index,row){
+				return '<div id="ddv-' + index + '" style="padding:5px 0"></div>';
+         	},
+			onExpandRow: function(index,row){
+				$('#ddv-'+index).panel({
+					height:80,
+					border:true,
+					cache:false,
+					href:'../pic/detail?owner_id='+row.ownerId,
+					onLoad:function(){
+						//$('#dg').datagrid('fixDetailRowHeight',index);
+			}
+			});
+				$('#dg').datagrid('fixDetailRowHeight',index);
+			}
+	});
+	});
+</script>
+</body>
+</html>

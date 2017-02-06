@@ -1,0 +1,48 @@
+package com.xym.bossed.service;
+
+import java.util.Iterator;
+import java.util.List;
+
+import com.xym.bossed.db.mybatis.kehu.Kehu;
+import com.xym.bossed.interfaces.IKehuService;
+
+public class TestKehuService {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		new TestKehuService().testGetKehuByKehuMcOrKehuDh();
+
+	}
+
+	public void testGetKehuByKehuMcOrKehuDhOnPagination() {
+		IKehuService ks = new KehuService();
+		List<Kehu> l = ks.getKehuByKehuMcOrKehuDhOnPagination("fdj",2,5);
+		Iterator i = l.iterator();
+		while (i.hasNext()) {
+			Kehu k = (Kehu) i.next();
+			System.out.println(k.getKehuMc());
+		}
+		
+	}
+
+	public void testGetKehuNoByKehuSh() {
+		IKehuService ks = new KehuService();
+
+		System.out.println(ks.getKehuNoByKehuSh("220106606092819"));
+
+	}
+
+	public void testGetKehuByKehuMcOrKehuDh() {
+		IKehuService ks = new KehuService();
+		List<Kehu> l = ks.getKehuByKehuMcOrKehuDh("fdj");
+		Iterator i = l.iterator();
+		while (i.hasNext()) {
+			Kehu k = (Kehu) i.next();
+			System.out.println(k.getKehuMc());
+		}
+
+	}
+
+}

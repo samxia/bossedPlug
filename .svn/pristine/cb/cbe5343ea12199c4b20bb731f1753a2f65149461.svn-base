@@ -1,0 +1,238 @@
+/**
+ * Bind click event to button
+ */
+$(function() {
+	bindClickEvent();	
+});
+function bindClickEvent()
+{
+	// New,click new button,enable the workspace
+	$('#new').bind('click', function() {
+		enableWorkspace();
+	});
+	//Destory,click destory button,disable the workspace
+	$('#destory').bind('click', function() {
+		destorySaleSheet();
+		
+	});
+	//Open
+	$('#open').unbind('click');
+	$('#open').bind('click', function() {
+		openSaleSheetSummaryWin();
+	});
+	//In the salw list open window, cancle button
+	$('#open_cancle').bind('click', function() {
+		$('#win_open_sale_sheet').window('close');
+	});
+	//Customer selecter
+	$('#button_customer_selecter').bind('click', function() {
+		$('#win_customer_selecter').window('open');
+	});
+	//In customer_selecter window, 'close' button
+	$('#button_customer_selecter_close').bind('click', function() {
+		$('#win_customer_selecter').window('close');
+	});
+	//Add parts button, id----button_add_parts
+	$('#button_add_parts').bind('click', function() {
+		$('#win_parts_selecter').window('open');
+	});
+	//close button,in parts selecter window
+	$('#button_parts_selecter_close').bind('click', function() {
+		$('#win_parts_selecter').window('close');
+	});
+	//
+	$('#open_ok').unbind('click');
+	$('#open_ok').bind('click', function() {
+		openSaleSheetSummaryItem();
+	});
+}
+/**
+ * Init sale item datagrid
+ */ 
+$(function(){
+    $('#datagird_sale_item').edatagrid({
+    url: ' ',
+    saveUrl: ' ',
+    updateUrl: ' ',
+    destroyUrl: ' '
+    });
+});
+/**
+ * While page show,add a new row
+ */
+$(function() {
+	//$('#datagird_sale_item').edatagrid('addRow');
+	addNewRow();
+	disableWorkspace();
+});
+/**
+ * Regist key event
+ */
+$(document).keydown(function(event){
+	console.log(event.keyCode);
+	
+	switch(event.keyCode) {
+	//press left key,move left
+	case 37:
+		$(event.target).parents('td').eq(1).prev().find('.datagrid-editable-input').first().focus();
+		break;
+	//press right key,move right
+	case 39:
+		$(event.target).parents('td').eq(1).next().find('.datagrid-editable-input').first().focus();
+		break;
+	//press up key ,move to up
+	case 38:
+		moveUp();
+		//event.stopPropagation();
+		event.preventDefault(); 
+		break;
+	 //按向下箭头,add a new row.
+	 case 40:
+		 moveDownOrAddNewRow();
+		// event.stopPropagation();
+		 event.preventDefault(); 
+		 break;
+		 //press del
+	 case 46:
+		 deleteRow();
+		 //event.stopPropagation();
+		 event.preventDefault();
+		 break;
+	 default: break;
+	}
+});
+/**
+ * Delete row
+ */
+function deleteRow()
+{
+	//Alway left one row
+	if($('#datagird_sale_item').datagrid('getRows').length==1)
+	{return	;}
+	//$.messager.confirm("请确认","确认删除这条记录吗？",function(r){
+	//	if (r){
+			  $('#datagird_sale_item').edatagrid('destroyRow');
+		//	}
+	//});
+	
+}
+/**
+ * add a new row,then focus on the '配件名称' filed。
+ */
+function addNewRow()
+{
+	$('#datagird_sale_item').edatagrid('addRow');
+	var editors = $('#datagird_sale_item').datagrid('getEditors', $('#datagird_sale_item').datagrid('getRows').length-1);
+	editors[1].target.focus();
+	
+}
+/**
+ * move up in datagrid
+ */
+function moveUp()
+{
+	var row_selected=$('#datagird_sale_item').datagrid('getSelected');
+	 if(row_selected==null)
+	 {return;}
+	var row_index=$('#datagird_sale_item').datagrid('getRowIndex',row_selected);
+	if(row_index!=0)
+	{    //move to up
+		 $('#datagird_sale_item').edatagrid('selectRow',row_index-1);
+	}
+}
+/**
+ * move down in datagrid,if is the last row,add a new row.
+ */
+function moveDownOrAddNewRow()
+{
+	//if no row selected,return;
+	 var row_selected=$('#datagird_sale_item').datagrid('getSelected');
+	 if(row_selected==null)
+	 {return;}
+	 
+	 var row_index=$('#datagird_sale_item').datagrid('getRowIndex',row_selected);
+	 var dg_rows=$('#datagird_sale_item').datagrid('getRows');
+	 var row_count=dg_rows.length;
+	 
+	 //check if the selected row is the last row,if yes,add a new row
+	 if(row_index+1==row_count)
+	 {
+		//$('#datagird_sale_item').edatagrid('addRow');
+		 addNewRow();
+	 }
+	 else
+	{
+		 //move to next row
+		 $('#datagird_sale_item').edatagrid('selectRow',row_index+1);
+		 
+	}
+}
+
+function onUnselectForDatagirdSaleItem(rowIndex, rowData){
+	alert(rowIndex);
+}
+function disableWorkspace()
+{
+	//div_work,div_sale_sheet_info,div_sale_sheet_credit,div_sale_sheet_cutomer,div_sale_sheet_invoice
+	//div_sale_sheet_workspace,div_sale_sheet_operator
+	$('#div_sale_sheet_workspace :input').attr("disabled",true);
+	$('#div_sale_sheet_operator :input').attr("disabled",true);
+	
+	$('#div_new a').linkbutton('enable');
+	bindClickEvent();
+	
+	$('#div_work a').linkbutton('disable');
+	$('#div_work a').unbind('click');
+	
+	
+	
+}
+function enableWorkspace()
+{
+	
+	$('#div_sale_sheet_workspace :input').removeAttr("disabled");
+	$('#div_sale_sheet_operator  :input').removeAttr("disabled");
+	
+	$('#div_work a').linkbutton('enable');
+	bindClickEvent();
+	
+	$('#div_new a').linkbutton('disable');
+	$('#div_new a').unbind('click');
+	
+	addNewRow();
+}
+/**
+ * 作废
+ */
+function destorySaleSheet()
+{
+	//clear input 
+	$('#div_sale_sheet_workspace').find(':input').val("");
+	$('#datagird_sale_item').datagrid('loadData',jQuery.parseJSON('{"total":0,"rows":[]}'));
+	disableWorkspace();
+}
+/**
+ * click open button in main page
+ */
+function openSaleSheetSummaryWin()
+{
+	SaleData.createNew().fillSaleSheetSummary2Datagrid();
+	//SaleData.createNew();
+	$('#win_open_sale_sheet').window('open');
+}
+function onClickRowForSheetOpenListDatagrid(rowIndex, rowData)
+{
+	$('#danhao').val(rowData.danhao);
+}
+function openSaleSheetSummaryItem()
+{
+	 var row=$('#datagrid_sheet_open_list').datagrid('getSelected');
+	 if(row==null)
+	 {
+		 alert("请选择销售单");
+		 return;
+	 }
+	 SaleData.createNew().openSaleSheetItem(row.danhao,row.kehuNo);
+	 enableWorkspace();
+	 $('#win_open_sale_sheet').window('close');
+}

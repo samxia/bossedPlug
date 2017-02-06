@@ -1,0 +1,26 @@
+log4j.rootLogger=debug, Console,R
+
+#Console
+log4j.appender.Console=org.apache.log4j.ConsoleAppender
+log4j.appender.Console.layout=org.apache.log4j.PatternLayout
+log4j.appender.Console.layout.ConversionPattern=%d [%t] %-5p [%c] - %m%n
+
+log4j.logger.java.sql.ResultSet=warn
+log4j.logger.org.apache.ibatis.datasource.pooled.PooledDataSource=warn
+log4j.logger.org.springframework=warn
+log4j.logger.org.springframework.beans=warn
+log4j.logger.org.apache.cxf=warn
+log4j.logger.java.sql.Connection=debug
+log4j.logger.java.sql.Statement=debug
+log4j.logger.java.sql.PreparedStatement=debug
+
+log4j.logger.org.apache.commons.beanutils.converters=warn
+log4j.logger.net.sf.ehcache.statistics.extended.ExtendedStatisticsImpl=warn
+log4j.logger.org.apache.ibatis.datasource.pooled.PooledDataSource=warn
+
+log4j.appender.R=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.R.File=logfile.log
+log4j.appender.R.DatePattern='.'yyyy-MM-dd
+log4j.appender.R.layout=org.apache.log4j.PatternLayout
+#log4j.appender.R.layout.ConversionPattern=%p %t %c - %m%n  
+log4j.appender.R.layout.ConversionPattern=%-d{yyyy-MM-dd HH\:mm\:ss} %p - %m%n

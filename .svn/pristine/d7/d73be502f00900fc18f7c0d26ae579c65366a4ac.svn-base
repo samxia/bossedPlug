@@ -1,0 +1,18 @@
+package com.xym.bossed.service;
+
+import java.util.List;
+
+import com.xym.bossed.db.mybatis.parts.fenlu.PartsFenLu;
+import com.xym.bossed.db.mybatis.parts.fenlu.PartsFenLuDAO;
+import com.xym.bossed.db.mybatis.parts.fenlu.PartsFenLuExample;
+
+public class PartsFenLuService {
+	public List<PartsFenLu> getFenLuByPartsNo(String partsNo) {
+		return new PartsFenLuDAO().selectByPartsNo(partsNo);
+	}
+	public static void main(String[] args)
+	{
+		PartsFenLuService ps=new PartsFenLuService();
+		System.out.println(ps.getFenLuByPartsNo("JYX-JX0818-CJ").size());
+	}
+}

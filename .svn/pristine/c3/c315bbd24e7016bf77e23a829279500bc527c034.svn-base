@@ -1,0 +1,17 @@
+package com.xym.bossed.service;
+
+public class TestKehuService {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		new TestKehuService().testGetKehuNoByKehuSh();
+
+	}
+public void testGetKehuNoByKehuSh(){
+	KehuService ks=new KehuService();
+	System.out.println(ks.getKehuNoByKehuSh("220106606092819"));
+}
+
+}

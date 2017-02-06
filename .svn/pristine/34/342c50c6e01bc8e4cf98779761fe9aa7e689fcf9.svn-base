@@ -1,0 +1,43 @@
+<servlet>
+	<description></description> 
+	<display-name>PictureCreate</display-name>
+	<servlet-name>PictureCreate</servlet-name>
+	<servlet-class>com.xym.bossed.servlet.picture.PictureCreate</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>PictureCreate</servlet-name>
+	<url-pattern>/pic/create</url-pattern>
+</servlet-mapping>
+
+<servlet>
+	<description></description> 
+	<display-name>PictureList</display-name>
+	<servlet-name>PictureList</servlet-name>
+	<servlet-class>com.xym.bossed.servlet.picture.PictureList</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>PictureList</servlet-name>
+	<url-pattern>/pic/list</url-pattern>
+</servlet-mapping>
+
+<servlet>
+	<description></description> 
+	<display-name>PictureDelete</display-name>
+	<servlet-name>PictureDelete</servlet-name>
+	<servlet-class>com.xym.bossed.servlet.picture.PictureDelete</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>PictureDelete</servlet-name>
+	<url-pattern>/pic/delete</url-pattern>
+</servlet-mapping>
+
+<servlet>
+	<description></description> 
+	<display-name>PictureUpdate</display-name>
+	<servlet-name>PictureUpdate</servlet-name>
+	<servlet-class>com.xym.bossed.servlet.picture.PictureUpdate</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>PictureUpdate</servlet-name>
+	<url-pattern>/pic/update</url-pattern>
+</servlet-mapping>

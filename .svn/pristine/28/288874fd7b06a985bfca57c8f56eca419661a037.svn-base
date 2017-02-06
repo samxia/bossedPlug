@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Welcome</title>
+</head>
+<body>
+Welcome page
+<div>
+<a href="fapiao">发票管理</a>
+</div>
+<div>
+<a href="contacts">联系人</a>
+</div>
+<div>
+<a href="logout">Logout</a>
+</div>
+</body>
+</html>

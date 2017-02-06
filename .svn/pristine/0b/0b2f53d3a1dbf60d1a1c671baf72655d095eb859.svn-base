@@ -1,0 +1,304 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Sale</title>
+<link rel="stylesheet" type="text/css"
+	href="../js/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css"
+	href="../js/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="../js/easyui/demo/demo.css">
+<script type="text/javascript" src="../js/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="../js/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/easyui/datagrid-bufferview.js"></script>
+<script type="text/javascript" src="../js/sale/data.js"></script>
+<script type="text/javascript" src="../js/sale/editors_extend.js"></script>
+<script type="text/javascript" src="../js/sale/ui_dg_sale_item.js"></script>
+<script type="text/javascript" src="../js/sale/parts_selector.js"></script>
+<script type="text/javascript" src="../js/sale/summary_selector.js"></script>
+<script type="text/javascript" src="../js/sale/customer_selector.js"></script>
+<script type="text/javascript" src="../js/sale/price_refer.js"></script>
+<script type="text/javascript" src="../js/sale/ui.js"></script>
+<style type="text/css">
+ .datagrid-editable .datagrid-editable-input {
+    border-style: none;
+    border-width: 0px !important;
+    margin: 0;
+    padding: 2px;
+}
+.datagrid-header td, .datagrid-body td, .datagrid-footer td {
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    margin: 0;
+    padding: 0;	
+}
+#div_sale_sheet_workspace .datagrid-row-selected {
+    background: none repeat scroll 0 0 #FFFFFF;
+    color: #000000 !important;
+}
+.datagrid-footer{
+	background: none repeat scroll 0 0 #EAF2FF !important;
+}
+[field=danWei] .combo{
+	border-style: none;
+}
+#div_danwei .combo-text{
+	/* width:80px */
+}
+</style>
+</head>
+<body>
+<div id="div_sale_sheet">
+	<div id="div_sale_menu">
+		 <div id="div_new" style="float: left;">
+			 <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-win7-new'" id="new">新建</a>
+			 <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-win7-open'" id="open">打开</a>
+		 </div>
+		 <div id="div_work">
+			 <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-win7-save'" id="save">保存</a>
+			 <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-win7-delete'" id="destory">作废</a>
+			 <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">结算</a>
+			 <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" id="button_add_parts">添加配件</a>
+			 <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-win7-preview'">预览</a>
+			 <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-win7-printer'">打印</a>
+		 </div>
+	 </div>
+	<div id="div_sale_sheet_info">
+		 <label>销售单号</label><input id="sale_sheet_dan_hao" readonly="readonly"></input>
+		<label>日期</label><input class="easyui-datetimebox" id="sale_sheet_date"></input>
+		<label>仓库</label> 
+		<select class="easyui-combobox"  data-options="url:'../cangku/list',valueField:'value',textField:'label'" id="sale_sheet_cangku" style="width:100px;"></select>
+		<label>客户卡号</label><input id="sale_sheet_customer_card_no"></input>
+<!-- 		<label>条码对货</label><input id="tiao_mao_dui_huo"></input>
+		<label>配件条码</label><input id="pei_jian_tiao_ma"></input> -->
+	</div>
+	<div id="div_sale_sheet_credit">
+		<label>此前欠款总额：</label><input id="sale_sheet_cqqkze" readonly="readonly"></input>
+		<label>信用额度：</label><input id="sale_sheet_xyed"></input>
+		<label>预收款总额：</label><input id="sale_sheet_yfkze"></input>
+	</div>
+	<div id="div_sale_sheet_cutomer" style="float: left;">
+		<label>客户编码</label><input type="text" value="" id="sale_sheet_kehuNo" onkeydown="enterForKehuNo(event,this)"/>
+		<input id="button_customer_selector" type="button" style="margin-left: -25px;margin-top:3px; height:20px;width:20px;background-image:url(../js/easyui/themes/icons/redo.png)"/> 
+		<label>联系人</label><input id="sale_sheet_lxr" readonly="readonly"></input><br>
+		<label>客户名称</label><input id="sale_sheet_name" readonly="readonly"></input>
+		<label>电话</label><input id="sale_sheet_tel" readonly="readonly"></input>
+	</div>
+	<div id="div_sale_sheet_invoice">
+		<label>发票类型</label>
+		<input class="easyui-combobox"  data-options="url:'../fapiao/leixing/list',valueField:'name',textField:'name'" id="fapiao_leixing" style="width:100px;"></input>
+		<label>发票号码</label><input id="" ></input><br>
+		<label>销售说明</label><input id="sale_sheet_beizhu" style="width:280px"></input>
+	</div>
+</div>
+	<div id="div_sale_sheet_workspace">
+		 <table id="datagird_sale_item" class="easyui-datagrid"
+		 data-options="onLoadSuccess:SaleItemUI.onLoadSuccess,showFooter:true,remoteSort:false,
+		 singleSelect:true,rownumbers:true,fitColumns:false,toolbar:'#div_sale_sheet'"
+		  style="width:1100px;height:550px">
+			<thead>
+				<tr>
+					<th field="bianMa" width="100" sortable=true editor="{type:'x_text',options:{ondblclick:'enterForMingcheng(event,this)',onkeydown:'enterForMingcheng(event,this)'}}">配件编码</th>
+					<th field="mingCheng" width="150" sortable=true editor="{type:'x_text',options:{ondblclick:'enterForMingcheng(event,this)',onkeydown:'enterForMingcheng(event,this)'}}">名称</th>
+					<th field="cheXing" width="80" sortable=true editor="text">车型</th>
+					<th field="pinPai" width="80" sortable=true editor="text">品牌</th>
+					<!-- <th field="danWei" width="80" editor="{type:'combobox',options:{valueField:'lcMc',textField:'lcMc',onShowPanel:function(){$(this).combobox('loadData',DanWeiData)}}}">单位</th>-->
+					<th field="danWei" width="80" editor="{type:'x_text',options:{ondblclick:'selectDanWei(this)',onkeydown:'enterForDanWei(event,this)'}}">单位</th> 
+					<th field="shuLiang" width="50" sortable=true editor="{type:'numberbox',options:{required:true}}">数量</th>
+					<th field="buHanShuiDanJia" width="50" sortable=true editor="{type:'numberbox',options:{precision:2}}">单价</th>
+					<th field="buHanShuiJinE" width="80" sortable=true editor="{type:'numberbox',options:{precision:2}}">金额</th>
+					<th field="beiZhu" width="50" sortable=true editor="text">备注</th>
+					<th field="tuHao" width="80" sortable=true editor="{type:'x_text',options:{ondblclick:'enterForMingcheng(event,this)',onkeydown:'enterForMingcheng(event,this)'}}">图号</th>
+					<th field="huoWei" width="50" sortable=true editor="text">货位</th>
+					<th field="cangKu" width="50" editor="text">仓库</th>
+					<th field="tongYongCheXing" width="50" editor="text">通用车型</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+	<div id="div_sale_sheet_operator">
+		<label>部门</label>
+        <input class="easyui-combobox"  data-options="url:'../dept/list',valueField:'name',textField:'name',
+        onSelect:EmployeeData.createNew().onSelectForDepartment" id="dept" style="width:100px;"></input>
+		<label>经办人</label>
+		<input class="easyui-combobox" data-options="valueField:'renyXm',textField:'renyXm'" id="employee" style="width:100px;"></input>
+		<label>结算方式</label>
+        <input class="easyui-combobox"  data-options="url:'../jiesuan/list',valueField:'jiesuanMc',textField:'jiesuanMc'" id="jiesuanfangshi" style="width:100px;"></input>
+		<label>操作员</label><input id=""></input>
+	</div>
+<div id="win_open_sale_sheet" class="easyui-window" title="打开销售单" 
+		data-options="resizable:false,maximizable:false,minimizable:false,collapsible:false,modal:true,closed:true,
+		iconCls:'icon-win7-open'" style="width:750px;height:430px;padding:10px;">
+      <div style="margin-bottom: 15px">请输入或选择要打开的单号<input id="danhao"></input></div>
+      <div>
+	      <div id="div_sheet_open_list" style="float: left;margin-bottom: 10px">
+				<table id="datagrid_sheet_open_list" class="easyui-datagrid" style="width:630px;height:280px"
+				data-options="singleSelect:true,collapsible:false,url:'',
+				remoteSort:false,onClickRow:onClickRowForSheetOpenListDatagrid,onDblClickRow:openSaleSheetSummaryItem">
+					<thead>
+						<tr>
+							<th data-options="field:'danhao',width:110,sortable:true">销售单号</th>
+							<th data-options="field:'mingcheng',width:100,sortable:true">客户名称</th>
+							<th data-options="field:'date',sortable:true">日期</th>
+							<th data-options="field:'beizhu',width:100,sortable:true">备注</th>
+							<th data-options="field:'shuliangSum',width:80,sortable:true">数量合计</th>
+							<th data-options="field:'hsjineSum',sortable:true">金额合计</th>
+							<th data-options="field:'xingming',width:80,sortable:true">联系人</th>
+							<th data-options="field:'jingbanren',sortable:true">经办人</th>
+						</tr>
+					</thead>
+				</table>
+	      </div>
+	      <div id="div_sheet_open_button">
+	           <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" id="open_ok" style="float: left;margin:30px 0px 20px 5px">确定</a>
+	           <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-no'" id="open_cancle" style="float: left;margin:0px 0px 20px 5px">取消</a>
+	           <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-help'" id="open_help" style="margin:0px 0px 5px 5px">帮助</a>
+	      </div>
+      </div>
+      
+      <div  id="div_open_search" style="width:620px;height:80px;" >
+   		  	<label>名称</label><input type="text" style="width: 190px"></input>
+   		  	<input type="checkbox"/><label>开始日期</label><input class="easyui-datebox"></input><br>
+   		  	<label>姓名</label><input type="text"/><label>经办人</label><select class="easyui-combobox"></select>
+   		  	<input type="checkbox"/><label>结束日期</label><input class="easyui-datebox"></input>
+     	  
+      </div>
+      <div id="div_open_search_button" style="float: right;">
+     			 <a href="#" class="easyui-linkbutton"  id="open_search" style="margin:55px 0px 10px 0px">开始搜索</a><br>
+                 <a href="#" class="easyui-linkbutton"  id="open_clear_cretira" style="margin:0px 0px 0px px">清除条件</a>
+       </div>
+       
+      
+</div>
+<div id="win_customer_selector" class="easyui-window" title="客户选择器" 
+		data-options="resizable:false,maximizable:false,minimizable:false,collapsible:false,modal:true,closed:true,
+		iconCls:'icon-win7-open',onOpen:CustomerSelector.onOpenForWindow" style="width:800px;height:550px;padding:10px;">
+		<!-- <div style="float:left">
+			<div id="div_customer_selecter_category" class="easyui-panel" style="width:150px;height:450px;padding:10px;">
+			    <ul class="easyui-tree"  data-options="url:'../contacts/kehu/category/search',method:'get',animate:true,lines:true"></ul>
+			</div>
+		</div> -->
+		<div id="div_customer_selecter_search">
+		   <label>名称/电话(<u>N</u>)</label><input type="text" style="width: 300px" id="name" onkeyup="CustomerSelector.onChangeForInput(this)"/>
+		   <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" id="button_customer_search">开始查询(<u>S</u>)</a>
+		    <a href="#" class="easyui-linkbutton" id="button_customer_clear">清除条件(<u>C</u>)</a>
+		</div>
+		<div id="div_customer_selecter_datagrid">
+				<table id="datagrid_customer_list" class="easyui-datagrid" style="width:750px;height:400px"
+				data-options="singleSelect:true,collapsible:false,url:'',method:'get',showFooter:true,
+				onDblClickRow:CustomerSelector.select">
+					<thead>
+						<tr>
+							<th data-options="field:'kehuNo',width:80">编码</th>
+							<th data-options="field:'kehuMc',width:160">名称</th>
+							<th data-options="field:'kehuXm',width:50,align:'left'">联系人</th>
+							<th data-options="field:'kehuDh',width:170,align:'left'">电话</th>
+							<th data-options="field:'kehuSj',width:80">手机</th>
+							<th data-options="field:'kehuBz',width:130" sortable="true">备注</th>
+						</tr>
+					</thead>
+				</table>
+		</div>
+		<div id="div_customer_selecter_bottom" style="padding-top: 20px;padding-left: 550px">
+			<a href="#" class="easyui-linkbutton" id="button_customer_selecter_select" data-options="iconCls:'icon-ok'">选中</a>
+			<a href="#" class="easyui-linkbutton" id="button_customer_selecter_close" data-options="iconCls:'icon-no'">关闭</a>
+		</div>
+</div>
+<div id="win_parts_selector" class="easyui-window" title="配件选择器"
+		data-options="resizable:true,maximizable:false,minimizable:false,collapsible:false,modal:true,closed:true,
+		iconCls:'icon-win7-open',onClose:PartsSelector.onCloseForWindow,onOpen:PartsSelector.onOpenForWindow" style="width:1000px;height:600px;padding:10px">
+		<div style="float:left">
+			<div id="div_parts_selector_category" class="easyui-panel" style="width:150px;height:530px;padding:10px;">
+			    <ul class="easyui-tree"  data-options="url:'../parts/category/search',method:'get',animate:true,lines:true"></ul>
+			</div>
+		</div>
+		<div id="div_parts_selector_search">
+			<div id="div_parts_selector_input_area" style="float: left">
+				<label>编码(<u>B</u>)</label><input type="text" id="peijNo" onkeyup="PartsSelector.onChangeForInput(this)"/>
+				<label>名称(<u>N</u>)</label><input type="text" id="peijMc" style="width: 200px" onkeyup="PartsSelector.onChangeForInput(this)"  tabindex="0"/><br>
+				<label>图号(<u>T</u>)</label><input type="text" id="peijTh" onkeyup="PartsSelector.onChangeForInput(this)"/>
+				<label>车型(<u>M</u>)</label><input type="text" id="peijCx" style="width: 200px" onkeyup="PartsSelector.onChangeForInput(this)"/><br>
+				<!-- <label>产地</label><input type="text"/> 
+				<label>通用车型</label><input type="text" id="parts_tongyongchexing" style="width: 175px"/>
+				<label>仓库</label><input type="text"/>-->
+				<!-- <label>其他</label><input type="text"/> -->
+			</div>
+			<div id="div_parts_selector_search_button">
+				<a href="#" class="easyui-linkbutton" id="button_parts_selector_search" data-options="iconCls:'icon-ok'" style="margin-top: 5px">开始查询(<u>S</u>)</a>
+				<a href="#" class="easyui-linkbutton" id="button_parts_selector_clear" data-options="iconCls:'icon-no'">清除条件(<u>C</u>)</a>
+			</div>
+		</div>
+		<div id="div_parts_selector_datagrid" style="float: left;clear:right;">
+			<table id="datagrid_parts_list" class="easyui-datagrid" style="width:805px;height:370px"
+				data-options="onDblClickRow:PartsSelector.selectWithReturn,
+				onSelect:PartsSelector.onSelectForPartsListDatagrid,remoteSort:false,
+				showFooter:true,singleSelect:false,collapsible:false,url:'',method:'get'">
+					<thead>
+						<tr>
+							<th data-options="field:'peijTh',width:80,sortable:true" >图号</th>
+							<th data-options="field:'peijMc',width:150,sortable:true">名称</th>
+							<th data-options="field:'peijCx',width:80,align:'center',sortable:true">车型</th>
+							<th data-options="field:'peijPp',width:80,align:'left',sortable:true">品牌</th>
+							<th data-options="field:'peijDw',width:30,sortable:true">单位</th>
+							<th data-options="field:'peijBz',width:50,sortable:true">备注</th>
+							<th data-options="field:'peijNo',width:100,sortable:true">编码</th>
+							<th data-options="field:'peijCd',width:50,sortable:true">产地</th>
+							<th data-options="field:'peijCxTy',width:50">通用车型</th>
+							<th data-options="field:'peijMb',width:50,sortable:true">每包数量</th>
+							<th data-options="field:'peijlbMc',width:50,sortable:true">类别</th>
+						</tr>
+					</thead>
+				</table>
+		</div>
+		<div style="margin-top:390px">
+			<label>数量</label><input type="text" value="1" id="defaultShuLiang"/> 
+			<a href="#" class="easyui-linkbutton" id="button_parts_selecter_select_no_return">选中不返回</a>
+		</div>
+		<div>
+			<table id="datagrid_parts_kucun" class="easyui-datagrid" style="width:805px;height:80px"
+				data-options="fitColumns:false,singleSelect:true,collapsible:false,url:'',method:'get'">
+					<thead>
+						<tr>
+							<th data-options="field:'peijNo',width:200">配件编码</th>
+							<th data-options="field:'cangkMc',width:60">仓库名称</th>
+							<th data-options="field:'kucHw',width:60">库位</th>
+							<th data-options="field:'peijKc',width:60">当前库存</th>
+							<th data-options="field:'canuseSl',width:60">可用库存</th>
+							<th data-options="field:'jiagJp',width:60">平均单价</th>
+							<th data-options="field:'peijJe',width:50">金额</th>
+							<th data-options="field:'kucSx',width:60">库存上限</th>
+							<th data-options="field:'kucXx',width:60">库存下限</th>
+							<th data-options="field:'jinhSl',width:80">订货警戒库存</th>
+						</tr>
+					</thead>
+			</table>
+		</div>
+		<div style="float: right;">
+			<a href="#" class="easyui-linkbutton" id="button_parts_selector_select_all">全部选中</a>
+			<a href="#" class="easyui-linkbutton" id="button_parts_selector_select_with_return" data-options="iconCls:'icon-ok'">选中返回</a>
+			<a href="#" class="easyui-linkbutton" id="button_parts_selector_close">关闭</a>
+		</div>
+</div>
+<div id="div_danwei" style="width:50px;height:20px;display: none">
+     <input class="easyui-combobox" id="combobox_danwei" style="width: 50px"
+      data-options="valueField:'lcMc',textField:'lcMc',onSelect:onSelectForDanWeiCombox,onShowPanel:function(){$(this).combobox('loadData',DanWeiData)}">
+</div>
+<!-- <div id="win_price" 
+class="easyui-window" title="价格参考"	data-options="border:false,noheader:true,closable:false,resizable:false,maximizable:false,minimizable:false,
+		collapsible:false,modal:false,closed:true" 	style="width:600px;height:470px;padding:10px"> -->
+ <div id="win_price" class="easyui-panel" closed='true' style="border:none;width:525px;height:auto;">
+    <table id="datagrid_price" class="easyui-datagrid" style="width:510px;height:auto"
+				data-options="fitColumns:false,singleSelect:true,collapsible:false">
+		<thead>
+			<tr>
+				<th data-options="field:'id',width:30">序号</th>
+				<th data-options="field:'priceDesc',width:150">描述</th>
+				<th data-options="field:'jiag',width:40">价格</th>
+				<th data-options="field:'yewuDh',width:140">业务单号</th>
+				<th data-options="field:'yewuRq',width:140">日期</th>
+			</tr>
+		</thead>
+	</table>
+</div>
+</body>
+</html>

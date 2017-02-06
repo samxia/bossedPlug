@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xym.bossed.db.mybatis.danhao.DanHaoMapper">
+	<select id="newDanhao" statementType="CALLABLE">
+	<![CDATA[
+	    {call sp_Newlist_new (#{list_code,mode=IN,jdbcType=INTEGER},#{Czy,mode=IN,jdbcType=VARCHAR},#{newlist_no,mode=OUT,jdbcType=VARCHAR})}
+	]]>
+	</select>
+	<delete id="zuofeiDanhao">
+	   delete from fapiao_kp_danhao_gz where kp_no = #{str_danhao};
+	   DELETE FROM system_net_info
+        WHERE list_code = #{list_code} AND computer_name = host_name()
+	</delete>
+</mapper>

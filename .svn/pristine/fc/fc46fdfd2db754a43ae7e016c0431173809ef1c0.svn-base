@@ -1,0 +1,44 @@
+package com.xym.bossed.security;
+
+import java.util.Collection;
+import java.util.Iterator;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.xym.bossed.interfaces.ISecurityService;
+
+public class SecurityService implements ISecurityService {
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.xym.bossed.security.ISecurityService#getCurrentUsername()
+	 */
+	@Override
+	public String getCurrentUsername() {
+		// comment to disable spring security
+		/*
+		 * Object principal = SecurityContextHolder.getContext()
+		 * .getAuthentication().getPrincipal(); String username = null; if
+		 * (principal instanceof UserDetails) { username = ((UserDetails)
+		 * principal).getUsername(); } else { username = principal.toString(); }
+		 * return username;
+		 */
+		return null;
+	}
+
+	public String getCurrentAuthorities() {
+		// Comment to disable spring security
+		/*
+		 * StringBuffer sb = new StringBuffer(); Collection<? extends
+		 * GrantedAuthority> as = SecurityContextHolder
+		 * .getContext().getAuthentication().getAuthorities(); Iterator it =
+		 * as.iterator(); while (it.hasNext()) { GrantedAuthority ga =
+		 * (GrantedAuthority) it.next();
+		 * sb.append(ga.getAuthority()).append(" "); } return sb.toString();
+		 */
+		return null;
+	}
+}

@@ -1,0 +1,29 @@
+package com.xym.bossed.servlet.security;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.xym.bossed.interfaces.ISecurityService;
+import com.xym.bossed.security.SecurityService;
+
+import net.sf.json.JSONObject;
+
+public class LoginStatus extends HttpServlet {
+
+	private static final long serialVersionUID = 116084141640859303L;
+
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		JSONObject jo = new JSONObject();
+		ISecurityService ss = new SecurityService();
+		String username = ss.getCurrentUsername();
+		jo.put("userName",username);
+		jo.put("authorities", ss.getCurrentAuthorities());
+		response.getWriter().println(jo.toString());
+	}
+
+}

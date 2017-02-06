@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xym.bossed.db.mybatis.cangku.CangKuMapper">
+<resultMap type="com.xym.bossed.db.mybatis.cangku.CangKu" id="CangKuResultMap">
+	<result column="cangk_dm" property="daiMa" jdbcType="VARCHAR"/>
+	<result column="cangk_mc" property="mingCheng" jdbcType="VARCHAR"/>
+	<result column="danw_dm" property="danwDM" jdbcType="VARCHAR"/>
+	<result column="danw_mc" property="danwMC" jdbcType="VARCHAR"/>
+	<result column="cangk_def" property="cangkDef" jdbcType="VARCHAR"/>
+	<result column="cangk_bz" property="beiZhu" jdbcType="VARCHAR"/>
+</resultMap>
+<select id="getAllCangKu" resultMap="CangKuResultMap">
+	select * from sm_cangk
+</select>
+</mapper>

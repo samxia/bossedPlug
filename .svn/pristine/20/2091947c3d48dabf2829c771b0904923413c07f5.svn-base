@@ -1,0 +1,30 @@
+package com.xym.bossed.interfaces;
+
+import java.util.List;
+
+import com.xym.bossed.db.mybatis.kehu.Kehu;
+
+public interface IKehuService {
+
+	/**
+	 * 
+	 * @param kehuXingZhing
+	 *            -kehu xingzhi 【 博士德中使用（ 1-客户 2-供应商）】
+	 * @return
+	 */
+	public List<Kehu> geKehuBykehuXz(Short kehuXingZhing);
+
+	/**
+	 * 
+	 * @param kehuSh
+	 *            -kehu shuihao
+	 * @return
+	 */
+	public abstract String getKehuNoByKehuSh(String kehuSh);
+
+	public abstract boolean existKehuNo(String kehuNo);
+
+	public List<Kehu> getKehuByKehuMcOrKehuDh(String mingchengOrDianhua);
+	public List<Kehu> getKehuByKehuMcOrKehuDhOnPagination(String mingchengOrDianhua,int page,int rows);
+	
+}

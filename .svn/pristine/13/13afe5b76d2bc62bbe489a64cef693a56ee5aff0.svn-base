@@ -1,0 +1,10 @@
+<servlet>
+	<description></description> 
+	<display-name>LoginStatus</display-name>
+	<servlet-name>LoginStatus</servlet-name>
+	<servlet-class>com.xym.bossed.servlet.security.LoginStatus</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>LoginStatus</servlet-name>
+	<url-pattern>/s/status</url-pattern>
+</servlet-mapping>

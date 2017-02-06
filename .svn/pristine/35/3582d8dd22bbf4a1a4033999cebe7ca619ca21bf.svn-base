@@ -1,0 +1,184 @@
+var PartsSelector={
+		createNew:function(){
+			var partsSelector={};
+			//init parts selector
+			partsSelector.init=function(){
+				//clear button binds
+				$('#button_parts_selector_clear').bind('click',partsSelector.clear);
+				// close button,in parts selector window
+				$('#button_parts_selector_close').bind('click', function() {
+					$('#win_parts_selector').window('close');
+				});
+				//search button
+				$('#button_parts_selector_search').bind('click', function() {
+					partsSelector.search();
+				});
+				//when press up and down key,select the row in parts selector
+				$("#datagrid_parts_list").datagrid({}).datagrid("keyUpAndDown");
+				//select_with_return button
+				$('#button_parts_selector_select_with_return').bind('click',function(){
+					partsSelector.selectWithReturn();
+				});
+			};
+			//clear button
+			partsSelector.clear=function(){
+				$('#div_parts_selector_input_area input').val('');
+			};
+			//search button
+			partsSelector.search=function()
+			{
+				var peijNo=$("#peijNo").val();
+				var peijMc=$("#peijMc").val();
+				var peijTh=$("#peijTh").val();
+				var peijCx=$("#peijCx").val();
+				
+				if(peijNo==""&&peijMc==""&&peijTh==""&peijCx=="")
+				{
+					return;
+				}
+				
+				partsSelector.getPartsAndFillToDataGrid(peijNo,peijMc,peijTh,peijCx);
+			};
+			partsSelector.getPartsAndFillToDataGrid=function(no,mc,th,cx)
+			{
+				$('#datagrid_parts_list').datagrid('loading');
+				$.ajax({
+					url:'../parts/list',
+					type:'post',
+					data:{peijNo:no,peijMc:mc,peijTh:th,peijCx:cx},
+					dataType:'json',
+					timeout:10000,
+					success:function(result){
+						$('#datagrid_parts_list').datagrid('loaded');
+						$('#datagrid_parts_list').datagrid('loadData',result);
+					}
+				});
+			};
+			//when close window,clear datagrid and input filed
+			partsSelector.onCloseForWindow=function()
+			{
+				isOpenForPartsSelectorWindow=false;
+				$('#datagrid_parts_list').datagrid('loadData',{'total':0,'rows':[]});
+				$('#datagrid_parts_kucun').datagrid('loadData',{'total':0,'rows':[]});
+				partsSelector.clear();
+			};
+			//when open window,set the status to isOpen
+			partsSelector.onOpenForWindow=function()
+			{
+				$('#peijMc').focus();
+				isOpenForPartsSelectorWindow=true;
+			};
+			//when the input filed is changed,search auto
+			partsSelector.onChangeForInput=function(target)
+			{
+				if($(target).val().length>1)
+				{
+					partsSelector.search();
+				}
+			};
+			//get fenlu by partsNo
+			partsSelector.getFenLuByPartsNo=function(no)
+			{
+				$.ajax({
+					url:'../parts/fenlu/list',
+					type:'post',
+					data:{partsNo:no},
+					dataType:'json',
+					timeout:10000,
+					success:function(result){
+						$('#datagrid_parts_kucun').datagrid('loadData',result);
+					}
+				});
+			};
+			//onSelectForPartsListDatagrid
+			partsSelector.onSelectForPartsListDatagrid=function(rowIndex,rowData)
+			{
+				if(rowData==null)return;
+				partsSelector.getFenLuByPartsNo(rowData.peijNo);
+			};
+			//select_with_return button
+			partsSelector.selectWithReturn=function(){
+				partsSelector.fillSelectedPartsDataToSaleItem();
+				$('#win_parts_selector').window('close');
+			};
+			//fill selected parts to sale item datagrid
+			partsSelector.fillSelectedPartsDataToSaleItem=function()
+			{
+				var selected = $('#datagrid_parts_list').datagrid('getSelected');
+				if(selected==null)
+				{
+					alert("Please select a record first.");
+					return;
+				}
+				
+				//if not start from a edited cell,add a new row
+				if(CurrentRowIndex==null)
+				{
+					CurrentRowIndex=$('#datagird_sale_item').datagrid('getRows').length;
+					addNewRow();
+				}
+				 
+				 /**
+				  * var ed = $('#dg').datagrid('getEditor', {index:1,field:'birthday'});
+					$(ed.target).datebox('setValue', '5/4/2012');
+				  */
+				 $($('#datagird_sale_item').datagrid('getEditor', {index:CurrentRowIndex,field:'bianMa'}).target).val(selected.peijNo);
+				 $($('#datagird_sale_item').datagrid('getEditor', {index:CurrentRowIndex,field:'mingCheng'}).target).val(selected.peijMc);
+				 $($('#datagird_sale_item').datagrid('getEditor', {index:CurrentRowIndex,field:'cheXing'}).target).val(selected.peijCx);
+				 $($('#datagird_sale_item').datagrid('getEditor', {index:CurrentRowIndex,field:'pinPai'}).target).val(selected.peijPp);
+				 $($('#datagird_sale_item').datagrid('getEditor', {index:CurrentRowIndex,field:'danWei'}).target).val(selected.peijDw);
+				// $('#defaultShuLiang').val();
+				 $($('#datagird_sale_item').datagrid('getEditor', {index:CurrentRowIndex,field:'shuLiang'}).target).numberbox('setValue',$('#defaultShuLiang').val());
+				// $($('#datagird_sale_item').datagrid('getEditor', {index:CurrentRowIndex,field:'buHanShuiDanJia'}).target).val(selected.);
+				// $($('#datagird_sale_item').datagrid('getEditor', {index:CurrentRowIndex,field:'beiZhu'}).target).val(selected.);
+				 $($('#datagird_sale_item').datagrid('getEditor', {index:CurrentRowIndex,field:'tuHao'}).target).val(selected.peijTh);
+				 //$($('#datagird_sale_item').datagrid('getEditor', {index:CurrentRowIndex,field:'huoWei'}).target).val(selected.);
+				// $($('#datagird_sale_item').datagrid('getEditor', {index:CurrentRowIndex,field:'cangKu'}).target).val(selected.);
+				 $($('#datagird_sale_item').datagrid('getEditor', {index:CurrentRowIndex,field:'tongYongCheXing'}).target).val(selected.peijCxTy);
+				 
+				 //validateRow
+				 $('#datagird_sale_item').datagrid('validateRow',CurrentRowIndex);
+				 //focus
+				 $($('#datagird_sale_item').datagrid('getEditor', {index:CurrentRowIndex,field:'shuLiang'}).target).focus();
+				 
+			};
+			return partsSelector;
+		}
+};
+
+$.extend($.fn.datagrid.methods, {
+    keyUpAndDown : function (jq) {
+        return jq.each(function () {
+            var grid = $(this);
+            grid.datagrid('getPanel').panel('panel').attr('tabindex', 1).bind('keydown', function (e) {
+                switch (e.keyCode) {
+                case 38: // up
+                    var selected = grid.datagrid('getSelected');
+                    if (selected) {
+                        var index = grid.datagrid('getRowIndex', selected);
+                        grid.datagrid('selectRow', index - 1);
+                    }
+                   /* else {
+                        var rows = grid.datagrid('getRows');
+                        grid.datagrid('selectRow', rows.length - 1);
+                    }*/
+                    e.stopPropagation();
+                    e.preventDefault();
+                    break;
+                case 40: // down
+                    var selected = grid.datagrid('getSelected');
+                    if (selected) {
+                        var index = grid.datagrid('getRowIndex', selected);
+                        grid.datagrid('selectRow', index + 1);
+                    } 
+                    else {
+                        grid.datagrid('selectRow', 0);
+                    }
+                    e.stopPropagation();
+                    e.preventDefault();
+                    break;
+                }
+            });
+        });
+    }
+});

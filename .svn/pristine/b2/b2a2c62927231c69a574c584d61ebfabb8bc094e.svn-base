@@ -1,0 +1,50 @@
+[main]
+shiro.loginUrl=/login/login.jsp
+#authc.successUrl = /
+authc.usernameParam = username
+authc.passwordParam = password
+authc.rememberMeParam =rememberMe
+
+dbRealm=com.xym.bossed.shiro.DBRealm
+securityManager.realms=$dbRealm
+
+cacheManager = org.apache.shiro.cache.MemoryConstrainedCacheManager
+securityManager.cacheManager = $cacheManager
+[urls]
+/login/login.jsp = authc
+/logout=logout
+#/index.jsp = anon
+
+#/auth/permission/del**=perms["permission:del"]
+
+#/contacts/**=authc
+/contacts/create**=perms["contacts:create"]
+/contacts/delete**=perms["contacts:delete"]
+/contacts/update**=perms["contacts:update"]
+
+/contacts/category/update**=perms["contacts:category:update"]
+/contacts/category/create**=perms["contacts:category:create"]
+/contacts/category/delete**=perms["contacts:category:delete"]
+
+/fapiao/**=perms["fapiao:show"]
+/fapiao/search**=perms["fapiao:search"]
+/fapiao/savelist**=perms["fapiao:savelist"]
+
+#/pic/**=authc
+/pic/create**=perms["pic:create"]
+/pic/update**=perms["pic:update"]
+/pic/delete**=perms["pic:delete"]
+
+#/upload/**=authc
+/upload/list**=perms["upload:list"]
+
+/auth/**=authc,roles[boss]
+
+[users]
+xym=2,boss
+guest=1
+sam=3,manager
+
+[roles]
+boss=*
+manager=contacts:del

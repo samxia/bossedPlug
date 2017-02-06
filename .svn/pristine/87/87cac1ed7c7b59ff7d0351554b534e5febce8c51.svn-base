@@ -1,0 +1,52 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                    http://www.springframework.org/schema/security 
+                    http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+	<global-method-security pre-post-annotations="enabled" />
+
+	<http pattern="/js/**" security="none" />
+	<http pattern="/welcome*.html" security="none" />
+	<http pattern="/menu.html" security="none" />
+	
+	
+	<http use-expressions="true">
+		<intercept-url pattern="/login/**" access="permitAll" />
+		<intercept-url pattern="/login_check" access="permitAll" />
+		<intercept-url pattern="/logout" access="permitAll" />
+		<intercept-url pattern="/s/status" access="permitAll" />
+		<intercept-url pattern="/upload/**" access="isFullyAuthenticated()" />
+		<intercept-url pattern="/fapiao/**" access="isFullyAuthenticated()" />
+		<intercept-url pattern="/contacts/**" access="isFullyAuthenticated()" />
+		<intercept-url pattern="/**" access="denyAll" />
+		<!-- <form-login/> -->
+		<form-login password-parameter="password"
+			username-parameter="name" login-processing-url="/login_check"
+			login-page="/login/login.html" authentication-failure-handler-ref="onLoginFailed"
+			authentication-success-handler-ref="onLoginSuccess" />
+
+		<remember-me />
+		<logout logout-url="/logout" />
+		<session-management>
+			<concurrency-control max-sessions="1"
+				error-if-maximum-exceeded="true" />
+		</session-management>
+	</http>
+	<beans:bean id="encoder"
+		class="org.springframework.security.crypto.password.StandardPasswordEncoder" />
+	<beans:bean id="onLoginFailed" class="com.xym.bossed.security.login.OnLoginFailed" />
+	<beans:bean id="onLoginSuccess" class="com.xym.bossed.security.login.OnLoginSuccess" />
+	<authentication-manager>
+		<authentication-provider>
+			<password-encoder ref="encoder" />
+			<user-service>
+				<!-- user-pwd:xym-r -->
+				<user name="xym"
+					password="69e9f6c4132402948e83ad1a64b55c550697ea0f0cd500653760a42ed199469777fd84aea789b64e"
+					authorities="admin, manager,user" />
+			</user-service>
+		</authentication-provider>
+	</authentication-manager>
+</beans:beans>   

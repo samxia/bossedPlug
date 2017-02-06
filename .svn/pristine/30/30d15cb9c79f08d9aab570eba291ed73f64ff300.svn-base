@@ -1,0 +1,21 @@
+<servlet>
+	<description></description> 
+	<display-name>SaleSheetSummaryList</display-name>
+	<servlet-name>SaleSheetSummaryList</servlet-name>
+	<servlet-class>com.xym.bossed.servlet.sale.SaleSheetSummaryList</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>SaleSheetSummaryList</servlet-name>
+	<url-pattern>/sale/SaleSheetSummary/list</url-pattern>
+</servlet-mapping>
+
+<servlet>
+	<description></description> 
+	<display-name>SaleSheetOpenByDanHao</display-name>
+	<servlet-name>SaleSheetOpenByDanHao</servlet-name>
+	<servlet-class>com.xym.bossed.servlet.sale.SaleSheetOpenByDanHao</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>SaleSheetOpenByDanHao</servlet-name>
+	<url-pattern>/sale/SaleSheetSummary/open</url-pattern>
+</servlet-mapping>

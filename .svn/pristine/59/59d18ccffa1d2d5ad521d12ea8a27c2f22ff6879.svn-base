@@ -1,0 +1,10 @@
+<servlet>
+	<description></description> 
+	<display-name>PartsCategorySearch</display-name>
+	<servlet-name>PartsCategorySearch</servlet-name>
+	<servlet-class>com.xym.bossed.servlet.parts.category.PartsCategorySearch</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>PartsCategorySearch</servlet-name>
+	<url-pattern>/parts/category/search</url-pattern>
+</servlet-mapping>

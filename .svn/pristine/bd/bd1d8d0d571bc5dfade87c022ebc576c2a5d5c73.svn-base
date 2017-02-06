@@ -1,0 +1,10 @@
+  <servlet>
+    <description></description>
+    <display-name>EmployeeList</display-name>
+    <servlet-name>EmployeeList</servlet-name>
+    <servlet-class>com.xym.bossed.servlet.employee.EmployeeList</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EmployeeList</servlet-name>
+    <url-pattern>/employee/list</url-pattern>
+  </servlet-mapping>

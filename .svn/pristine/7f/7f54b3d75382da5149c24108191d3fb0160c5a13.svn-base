@@ -1,0 +1,22 @@
+package com.xym.bossed.service;
+
+import java.util.ArrayList;
+import java.util.Date;
+
+import com.xym.bossed.interfaces.IFapiaoService;
+
+public class FapiaoService implements IFapiaoService{
+
+	@Override
+	public ArrayList listAllFapiao() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ArrayList listFapiaoByDate(Date start, Date end) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

@@ -1,0 +1,10 @@
+  <servlet>
+    <description></description>
+    <display-name>JieSuanList</display-name>
+    <servlet-name>JieSuanList</servlet-name>
+    <servlet-class>com.xym.bossed.servlet.jiesuan.JieSuanList</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>JieSuanList</servlet-name>
+    <url-pattern>/jiesuan/list</url-pattern>
+  </servlet-mapping>

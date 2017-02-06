@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>menu for contacts</title>
+<link rel="stylesheet" type="text/css"
+	href="../js/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css"
+	href="../js/easyui/themes/icon.css">
+<script type="text/javascript" src="../js/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="../js/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript">
+function changeFrameSrc(url)
+{
+	$("#iframe_main",parent.document.body).attr("src",url);
+}
+</script>
+</head>
+<body>
+	<div style="margin:10px 0;">
+		<a href="#" class="easyui-linkbutton"
+			data-options="iconCls:'icon-search'" onclick="changeFrameSrc('list.html')"
+			>联系人查询</a>
+	</div>
+	<div style="margin:10px 0;">
+		<a href="#" class="easyui-linkbutton"
+			data-options="iconCls:'icon-save'" onclick="changeFrameSrc('create.html')"
+			>新建联系人</a>
+	</div>
+	
+</body>
+</html>

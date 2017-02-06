@@ -1,0 +1,68 @@
+package com.xym.bossed.servlet.parts;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONObject;
+
+import com.xym.bossed.db.mybatis.parts.Parts;
+import com.xym.bossed.service.PartsService;
+import com.xym.bossed.servlet.sale.SaleSheetOpenByDanHao.Footer;
+
+public class PartsList extends HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9187211392008246906L;
+
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("GBK");
+		response.setContentType("text/html;charset=GBK");
+		
+		Parts parts=new Parts();
+		parts.setPeijNo(request.getParameter("peijNo"));
+		parts.setPeijMc(request.getParameter("peijMc"));
+		parts.setPeijTh(request.getParameter("peijTh"));
+		parts.setPeijCx(request.getParameter("peijCx"));
+		
+		PartsService ps=new PartsService();
+		List<Parts> list=ps.getPartsByCriteria(parts);
+		JSONObject jo = new JSONObject();
+		jo.put("total", list.size());
+		jo.put("rows", list);
+		
+		//footer
+		List<Footer> footer_list=new ArrayList<Footer>();
+		Footer footer=new Footer();
+		footer.setPeijMc("¼ÇÂ¼Êý£º"+list.size());
+		footer_list.add(footer);
+		jo.put("footer", footer_list);
+		
+		response.getWriter().println(jo.toString());
+	}
+	public class Footer {
+		private String peijMc;
+
+		public String getPeijMc() {
+			return peijMc;
+		}
+
+		public void setPeijMc(String peijMc) {
+			this.peijMc = peijMc;
+		}
+		
+	}
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		this.doGet(request, response);
+	}
+
+}

@@ -1,0 +1,20 @@
+package com.xym.bossed.interfaces;
+
+import java.util.List;
+
+import com.xym.bossed.db.mybatis.sale.PartsItem;
+import com.xym.bossed.db.mybatis.sale.SaleSheetSummary;
+
+public interface ISaleService {
+
+	public abstract String createNewDanHao();
+
+	public abstract int zuoFeiSaleSheet(String danHao);
+
+	public abstract List<SaleSheetSummary> getAllSaleSheetSummary();
+
+	public abstract SaleSheetSummary getSaleSheetSummaryByDanHao(String danHao);
+
+	public abstract List<PartsItem> getTempPartsItemByDanHao(String danHao);
+
+}

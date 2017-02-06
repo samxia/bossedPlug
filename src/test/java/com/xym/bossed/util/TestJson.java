@@ -1,0 +1,25 @@
+package com.xym.bossed.util;
+
+import java.util.ArrayList;
+
+import net.sf.json.JSONObject;
+
+public class TestJson {
+	public static void main(String[] args) {
+		new TestJson().LearnJson();
+	}
+	public void LearnJson()
+	{
+		 JSONObject jo = new JSONObject();
+		 jo.put("key","value");
+		 ArrayList<TestBean> list=new ArrayList<TestBean>();
+		 
+		 list.add(new TestBean("a1","a2"));
+		 list.add(new TestBean("b1","b2"));
+		 
+		 jo.put("rows",list);
+		 jo.put("count", list.size());
+		 System.out.println(jo.toString());
+		 
+	}
+}

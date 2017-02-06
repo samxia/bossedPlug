@@ -1,0 +1,16 @@
+package com.xym.bossed.authority;
+
+public interface IAuthority {
+	String QueryKuCunBuyPrice1="data:kucun:query:buyprice1";
+	String QueryKuCunBuyPrice2="data:kucun:query:buyprice2";
+	String QueryKuCunBuyPrice3="data:kucun:query:buyprice3";
+	String QueryKuCunAveragePrice="data:kucun:query:averageprice";
+	String QueryKuCunAvaliableKuCun="data:kucun:query:aviliableKucun";
+	String QueryKuCunCureentKuCun="data:kucun:query:currentKucun";
+	String QueryKuCunAmount="data:kucun:query:amount";
+	String QueryKuCunAlarm="data:kucun:query:kucunAlarm";
+	String QueryKuCunMax="data:kucun:query:kucunMax";
+	String QeuryKuCunMin="data:kucun:query:kucunMin";
+	
+	boolean isPermission(String PermissionString);
+}

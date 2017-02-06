@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xym.bossed.db.mybatis.fapiao.leixing.LeiXingMapper">
+<cache/>
+	<select id="getAllLeiXing"
+		resultType="com.xym.bossed.db.mybatis.fapiao.leixing.FaPiaoLeiXing">
+		select reco_no as recoNo,fp_mc as name,fp_shlv as shuiLv,fp_def as fpDef
+		from sm_fapiao
+	</select>
+</mapper>

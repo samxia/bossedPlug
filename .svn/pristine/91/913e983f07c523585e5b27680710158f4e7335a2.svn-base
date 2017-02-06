@@ -1,0 +1,11 @@
+package com.xym.bossed.db.mybatis.dept;
+
+import java.io.Serializable;
+
+public class Department implements Serializable{
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 454121352265548761L;
+private String recoNo,name;
+}

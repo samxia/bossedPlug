@@ -1,0 +1,2 @@
+keytool -genkey -keystore MyApplet.store -alias MyApplet
+keytool -export -keystore MyApplet.store -alias MyApplet -file MyApplet.cert

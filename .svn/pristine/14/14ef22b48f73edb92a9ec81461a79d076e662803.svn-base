@@ -1,0 +1,20 @@
+<servlet>
+	<description></description> 
+	<display-name>FapiaoSearch</display-name>
+	<servlet-name>FapiaoSearch</servlet-name>
+	<servlet-class>com.xym.bossed.servlet.fapiao.FapiaoSearch</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>FapiaoSearch</servlet-name>
+	<url-pattern>/fapiao/search</url-pattern>
+</servlet-mapping>
+<servlet>
+	<description></description> 
+	<display-name>FapiaoCSV2JSON</display-name>
+	<servlet-name>FapiaoCSV2JSON</servlet-name>
+	<servlet-class>com.xym.bossed.servlet.fapiao.FapiaoCSV2JSON</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>FapiaoCSV2JSON</servlet-name>
+	<url-pattern>/fapiao/csv</url-pattern>
+</servlet-mapping>

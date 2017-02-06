@@ -1,0 +1,113 @@
+package com.xym.bossed.servlet.auth;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.xym.bossed.shiro.Permission;
+import com.xym.bossed.shiro.Role;
+import com.xym.bossed.shiro.UserService;
+
+
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+/**
+ * Servlet implementation class PermissionsOfRoleSave
+ */
+public class PermissionsOfRoleSave extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	/**  
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public PermissionsOfRoleSave() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		this.doPost(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+	   request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
+
+		String str_role = request.getParameter("role");
+		String str_permissions = request.getParameter("permissions");
+
+		// JSON String to bean
+		JSONObject jo_role = JSONObject.fromObject(str_role);
+		Role role = (Role) JSONObject.toBean(jo_role, Role.class);
+
+		// JSON Array to bean
+		JSONArray ja_perms = JSONArray.fromObject(str_permissions);
+		List<Permission> perms_new = JSONArray.toList(ja_perms,
+				Permission.class);
+
+		UserService us = new UserService();
+		List<Permission> perms_old = us.getPermissionsByRoleId(role.getId());
+
+		List<Permission> perms_tobe_delete = removeSameObject(perms_old,
+				perms_new);
+		List<Permission> perms_tobe_insert = removeSameObject(perms_new,
+				perms_old);
+
+		JSONObject jo = new JSONObject();
+		// if there is no change,return
+		if (perms_tobe_delete.size() == 0 && perms_tobe_insert.size() == 0) {
+			jo.put("errorMsg", "No changes.");
+			response.getWriter().println(jo.toString());
+			return;
+		}
+
+		for(Permission perm:perms_tobe_delete)
+		{
+			us.deletePermissionsOfRole(role, perm);
+		}
+		for(Permission perm:perms_tobe_insert)
+		{
+			us.insertPermissionsOfRole(role, perm);
+		}
+		jo.put("result","success");
+		response.getWriter().println(jo.toString());
+	}
+
+	private List<Permission> removeSameObject(List<Permission> list1,
+			List<Permission> list2) {
+		List<Permission> rt = new ArrayList<Permission>();
+
+		for (Permission p : list1) {
+			rt.add(p);
+		}
+
+		for (int i = 0; i < rt.size(); i++) {
+			Permission perm1 = rt.get(i);
+			for (int j = 0; j < list2.size(); j++) {
+				Permission perm2 = list2.get(j);
+				if (perm1.getId() == perm2.getId()) {
+					rt.remove(i);
+				}
+			}
+		}
+		return rt;
+	}
+}

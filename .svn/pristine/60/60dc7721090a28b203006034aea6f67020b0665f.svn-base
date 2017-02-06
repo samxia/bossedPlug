@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+	<classPathEntry
+		location="D:/Softwares/JAVA/maven/repository/net/sourceforge/jtds/jtds/1.2.4/jtds-1.2.4.jar"></classPathEntry>
+	<context id="MySQLTables" targetRuntime="MyBatis3">
+		<!-- <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/module" 
+			userId="root" password=""> </jdbcConnection> -->
+		<!-- <jdbcConnection driverClass="com.microsoft.jdbc.sqlserver.SQLServerDriver" 
+			connectionURL="jdbc:microsoft:sqlserver://192.168.2.100:1433" userId="sa" 
+			password="1"> </jdbcConnection> -->
+		<jdbcConnection driverClass="net.sourceforge.jtds.jdbc.Driver"
+			connectionURL="jdbc:jtds:sqlserver://192.168.2.100:1433;DatabaseName=yzbp50"
+			userId="sa" password="1">
+		</jdbcConnection>
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<javaModelGenerator targetPackage="com.xym.bossed.db.mybatis.picture"
+			targetProject="D:\Workspaces_MyEclipse\bossedPlug\src\main\resources">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="com.xym.bossed.db.mybatis.picture"
+			targetProject="D:\Workspaces_MyEclipse\bossedPlug\src\main\resources">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.xym.bossed.db.mybatis.picture" targetProject="D:\Workspaces_MyEclipse\bossedPlug\src\main\resources">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+
+		<!-- <table tableName="groups" domainObjectName="Group"/> -->
+		<!-- <property name="useActualColumnNames" value="true" /> <generatedKey 
+			column="id" sqlStatement="MySql" identity="true" /> -->
+
+		<!-- <table tableName="roles" domainObjectName="Role"></table> -->
+		<!-- <table tableName="user_group"></table> -->
+		<!-- <table tableName="users" domainObjectName="User"></table> -->
+		<!--<table tableName="fapiao_kp_pz" domainObjectName="FaPiao"></table>-->
+		<!-- <table tableName="x_contact_category" domainObjectName="ContactCategory"></table> -->
+		<!-- <table tableName="sm_gongyshlb" domainObjectName="GongYSLeibie"></table> -->
+      <table tableName="x_picture" domainObjectName="Picture"></table>
+	</context>
+</generatorConfiguration>
+

@@ -1,0 +1,9 @@
+package com.xym.bossed.interfaces;
+
+public interface IKehuService {
+
+	public abstract String getKehuNoByKehuSh(String kehuSh);
+
+	public abstract boolean existKehuNo(String kehuNo);
+
+}

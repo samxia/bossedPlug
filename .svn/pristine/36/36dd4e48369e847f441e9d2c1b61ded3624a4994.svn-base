@@ -1,0 +1,64 @@
+package com.xym.bossed.servlet.upload;
+
+import java.io.File;
+import java.io.IOException;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+public class UploadList extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	private File fileUploadPath;
+
+	@Override
+	public void init(ServletConfig config) {
+		fileUploadPath = new File(config.getServletContext().getInitParameter(
+				"upload_path"));
+		if(!fileUploadPath.exists())
+		{
+			fileUploadPath.mkdir();
+		}
+	}
+
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		this.doPost(request, response);
+	}
+
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		response.setContentType("text/html;charset=UTF-8");
+		response.getWriter().write(this.getFileList(fileUploadPath).toString());
+
+	}
+
+	public JSONArray getFileList(File file) {
+		JSONArray jsonarray=new JSONArray();
+		//File file=new File("g:\\upload");
+		File[] fs=file.listFiles();
+		for(int i=0;i<fs.length;i++)
+		{
+			JSONObject jsonobj=new JSONObject();
+			File f=fs[i];
+			jsonobj.put("name",f.getName());
+			jsonobj.put("length",f.length());
+			jsonarray.add(jsonobj);
+		}
+		return jsonarray;
+	}
+	public static void main(String[] args)
+	{
+		File file=new File("g:\test");
+		System.out.println(file.exists());
+		
+	}
+
+}

@@ -1,0 +1,133 @@
+package com.xym.bossed.db.mybatis.picture;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.SqlSession;
+
+import com.xym.bossed.db.mybatis.SQLFactory;
+
+
+public class PictureDAO implements PictureMapper {
+
+	public List<Picture> selectDistinctPictureByOwnerId(PictureExample example)
+	{
+		SqlSession session = SQLFactory.getFactory().openSession();
+		List<Picture> list = null;
+		try {
+			PictureMapper mapper = session.getMapper(PictureMapper.class);
+			list = mapper.selectDistinctPictureByOwnerId(example);
+		} finally {
+			session.close();
+		}
+		return list;
+	}
+	@Override
+	public int countByExample(PictureExample example) {
+		SqlSession session = SQLFactory.getFactory().openSession();
+		int rv = 0;
+		try {
+			PictureMapper mapper = session.getMapper(PictureMapper.class);
+			rv = mapper.countByExample(example);
+			session.commit();
+		} finally {
+			session.close();
+		}
+		return rv;
+	}
+
+	@Override
+	public int deleteByExample(PictureExample example) {
+		SqlSession session = SQLFactory.getFactory().openSession();
+		int rv = 0;
+		try {
+			PictureMapper mapper = session.getMapper(PictureMapper.class);
+			rv = mapper.deleteByExample(example);
+			session.commit();
+		} finally {
+			session.close();
+		}
+		return rv;
+	}
+
+	@Override
+	public int insert(Picture record) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int insertSelective(Picture record) {
+		SqlSession session = SQLFactory.getFactory().openSession();
+		int rt;
+		try {
+			PictureMapper mapper = session.getMapper(PictureMapper.class);
+			rt = mapper.insertSelective(record);
+			session.commit();
+		} finally {
+			session.close();
+		}
+		return rt;
+	}
+
+	@Override
+	public List<Picture> selectByExample(PictureExample example) {
+		SqlSession session = SQLFactory.getFactory().openSession();
+		List<Picture> list = null;
+		try {
+			PictureMapper mapper = session.getMapper(PictureMapper.class);
+			list = mapper.selectByExample(example);
+		} finally {
+			session.close();
+		}
+		return list;
+	}
+
+	@Override
+	public int updateByExampleSelective(@Param("record") Picture record,
+			@Param("example") PictureExample example) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int updateByExample(@Param("record") Picture record,
+			@Param("example") PictureExample example) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteByPrimaryKey(Integer id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Picture selectByPrimaryKey(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int updateByPrimaryKeySelective(Picture record) {
+		SqlSession session = SQLFactory.getFactory().openSession();
+		int rv=0;
+		try {
+			PictureMapper mapper = session.getMapper(PictureMapper.class);
+			rv = mapper.updateByPrimaryKeySelective(record);
+			session.commit();
+		} finally {
+			session.close();
+		}
+		return rv;
+	}
+
+	@Override
+	public int updateByPrimaryKey(Picture record) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+}

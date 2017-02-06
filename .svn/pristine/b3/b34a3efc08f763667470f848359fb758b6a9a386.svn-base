@@ -1,0 +1,55 @@
+package com.xym.bossed.shiro.captcha;
+
+import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
+
+import com.xym.bossed.shiro.DBRealm;
+import com.xym.bossed.shiro.ShiroSessionKey;
+import com.xym.bossed.shiro.User;
+import com.xym.bossed.shiro.UserService;
+import com.xym.bossed.shiro.ipSecurity.IPStrategy;
+import com.xym.bossed.shiro.ipSecurity.IPStrategyException;
+
+public class CaptchaRealm extends DBRealm {
+	static Logger log = Logger.getLogger(CaptchaRealm.class);
+
+	@Override
+	/**
+	 * login
+	 */
+	protected AuthenticationInfo doGetAuthenticationInfo(
+			AuthenticationToken token) throws AuthenticationException {
+		CaptchaUsernamePasswordToken uToken = (CaptchaUsernamePasswordToken) token;
+		// check ipstrategy
+         if(!IPStrategy.checkLoginIP(uToken.getHost()))
+         {
+        	 throw new IPStrategyException("违反ip策略，请联系管理员。");
+         }
+		// check captcha
+		log.debug("host:" + uToken.getHost());
+		if (!validateCaptcha(uToken.getCaptcha())) {
+			throw new IncorrectCaptchaException("验证码错误！");
+		}
+		// get user info from db
+		log.debug("doGetAuthenticationInfo() userName:" + uToken.getUsername());
+		User user = new UserService().getUserByName(uToken.getUsername());
+		if (user != null) {
+			return new SimpleAuthenticationInfo(user.getUserName(),
+					user.getPassword(), getName());
+		}
+		return null;
+	}
+
+	private boolean validateCaptcha(String captchaFromPage) {
+		String captcharFromSession = (String) SecurityUtils.getSubject()
+				.getSession().getAttribute(ShiroSessionKey.CAPTCHA);
+		if (captchaFromPage == null || captchaFromPage.trim().isEmpty()) {
+			return false;
+		}
+		return captchaFromPage.equalsIgnoreCase(captcharFromSession);
+	}
+}

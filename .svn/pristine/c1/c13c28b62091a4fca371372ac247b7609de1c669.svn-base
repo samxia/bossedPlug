@@ -1,0 +1,32 @@
+<servlet>
+	<description></description> 
+	<display-name>LoginStatus</display-name>
+	<servlet-name>LoginStatus</servlet-name>
+	<servlet-class>com.xym.bossed.servlet.security.LoginStatus</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>LoginStatus</servlet-name>
+	<url-pattern>/s/status</url-pattern>
+</servlet-mapping>
+
+<servlet>
+	<description></description> 
+	<display-name>CheckPermissions</display-name>
+	<servlet-name>CheckPermissions</servlet-name>
+	<servlet-class>com.xym.bossed.servlet.security.CheckPermissions</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>CheckPermissions</servlet-name>
+	<url-pattern>/s/checkPerms</url-pattern>
+</servlet-mapping>
+
+<servlet>
+	<description></description> 
+	<display-name>IPStrategyUnlock</display-name>
+	<servlet-name>IPStrategyUnlock</servlet-name>
+	<servlet-class>com.xym.bossed.servlet.security.IPStrategyUnlock</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>IPStrategyUnlock</servlet-name>
+	<url-pattern>/s/ipstrategy</url-pattern>
+</servlet-mapping>

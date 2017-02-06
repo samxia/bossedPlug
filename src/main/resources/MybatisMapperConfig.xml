@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- <properties> <property name="driver" value="com.mysql.jdbc.Driver" 
+		/> <property name="url" value="jdbc:mysql://localhost:3306/module" /> <property 
+		name="username" value="root" /> <property name="password" value="" /> </properties> -->
+	<properties>
+		<property name="driver" value="net.sourceforge.jtds.jdbc.Driver" />
+		<property name="url"
+			value="jdbc:jtds:sqlserver://127.0.0.1:1433;DatabaseName=yzbp50_ltp" />
+		<property name="username" value="sa" />
+		<property name="password" value="1" />
+	</properties>
+	<settings>
+		<setting name="cacheEnabled" value="true" />
+	</settings>
+	<typeAliases>
+		<typeAlias type="com.xym.bossed.shiro.User" alias="User" />
+		<typeAlias type="com.xym.bossed.shiro.Role" alias="Role" />
+		<typeAlias type="com.xym.bossed.shiro.Permission" alias="Permission" />
+	</typeAliases>
+	<!-- Setup the transaction manager and data source that are appropriate 
+		for your environment -->
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC">
+			</transactionManager>
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}" />
+				<property name="url" value="${url}" />
+				<property name="username" value="${username}" />
+				<property name="password" value="${password}" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<!-- XML mapper files should be listed here -->
+		<mapper resource="com/xym/bossed/db/mybatis/fapiao/FaPiaoMapper.xml" />
+		<mapper resource="com/xym/bossed/db/mybatis/danhao/DanHaoMapper.xml" />
+		<mapper resource="com/xym/bossed/db/mybatis/kehu/KehuMapper.xml" />
+		<mapper resource="com/xym/bossed/db/mybatis/kehu/leibie/KehuLeibieMapper.xml" />
+		<mapper resource="com/xym/bossed/db/mybatis/gys/leibie/GongYSLeibieMapper.xml" />
+		<mapper resource="com/xym/bossed/db/mybatis/procedure/ProcedureMapper.xml" />
+		<mapper	resource="com/xym/bossed/db/mybatis/contact/category/ContactCategoryMapper.xml" />
+		<mapper resource="com/xym/bossed/db/mybatis/picture/PictureMapper.xml" />
+		<mapper resource="com/xym/bossed/db/mybatis/log/LogMapper.xml" />
+		<mapper resource="com/xym/bossed/db/mybatis/realm/realmMapper.xml" />
+		<mapper	resource="com/xym/bossed/db/mybatis/auth/contacts/ExcludedContactsMapper.xml" />
+		<mapper resource="com/xym/bossed/db/mybatis/sale/SaleMapper.xml" />
+		<mapper resource="com/xym/bossed/db/mybatis/yshk/YSHKMapper.xml" />
+		<mapper resource="com/xym/bossed/db/mybatis/cangku/CangKuMapper.xml" />
+		<mapper resource="com/xym/bossed/db/mybatis/fapiao/leixing/LeiXingMapper.xml" />
+		<mapper resource="com/xym/bossed/db/mybatis/dept/DepartmentMapper.xml" />
+		<mapper resource="com/xym/bossed/db/mybatis/jiesuan/JieSuanMapper.xml" />
+		<mapper resource="com/xym/bossed/db/mybatis/employee/EmployeeMapper.xml" />
+		<mapper resource="com/xym/bossed/db/mybatis/parts/category/PartsCategoryMapper.xml"/>
+		<mapper resource="com/xym/bossed/db/mybatis/danwei/DanWeiMapper.xml"/>
+		<mapper resource="com/xym/bossed/db/mybatis/parts/PartsMapper.xml"/>
+		<mapper resource="com/xym/bossed/db/mybatis/parts/fenlu/PartsFenLuMapper.xml"/>
+		<mapper resource="com/xym/bossed/db/mybatis/price/PriceMapper.xml"/>
+	</mappers>
+
+</configuration>

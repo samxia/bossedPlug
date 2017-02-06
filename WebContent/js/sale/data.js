@@ -1,0 +1,186 @@
+var SaleData={
+		createNew:function()
+		{
+			var saleData={};
+			//zuo fei sale sheet
+			saleData.zuofeiSaleSheet=function(danHao)
+			{
+				$.ajax({
+					url: 'zuofei',
+					type: 'post',
+					data:{danHao:danHao},
+					dataType: 'json',
+					timeout: 100000,
+					success: function(result){
+						if(result!=1)
+						{
+							alert("作废失败");
+						}
+					}
+					
+				});
+			};
+			//new sale sheet
+			saleData.newSaleSheet=function()
+			{
+				$.ajax({
+					url: 'newdanhao',
+					type: 'get',
+					dataType: 'json',
+					timeout: 100000,
+					success: function(result){
+						$('#sale_sheet_dan_hao').val(result.danHao);
+						$('#sale_sheet_date').datetimebox('setValue',result.date);
+					}
+					
+				});
+			};
+			/**
+			 * get all danwei data
+			 */
+			saleData.getAllDanwei=function()
+			{
+					$.ajax({
+						url: '../danwei/list',
+						type: 'POST',
+						dataType: 'json',
+						timeout: 100000,
+						success: function(result){
+							DanWeiData=result;
+						}
+						
+					});
+			}
+			/**
+			 * fill up the summary data to sheet list datagrid.
+			 */
+			saleData.fillSaleSheetSummary2Datagrid=function()
+			{
+						$.ajax({
+							url: 'SaleSheetSummary/list',
+							type: 'POST',
+							dataType: 'json',
+							timeout: 100000,
+							success: function(result){
+								 $('#datagrid_sheet_open_list').datagrid('loadData',result);
+							}
+							
+						});
+			}
+			/**
+			 * open sale summary
+			 */
+			saleData.openSaleSheetItem=function(danHao,kehuNo)
+			{
+				$('#datagird_sale_item').datagrid('loading');
+				$.ajax({
+					//async:false,
+					url: 'SaleSheetSummary/open',
+					type: 'POST',
+					data:{danHao:danHao,kehuNo:kehuNo},
+					dataType: 'json',
+					timeout: 100000,
+					success: function(result){
+						$('#datagird_sale_item').datagrid('loaded');
+						
+						//fill sale datagrid 
+						 $('#datagird_sale_item').datagrid('loadData',result);
+						 
+						 //if no any item,add a new row for the first row
+						 if(result.total==0)
+						 {
+							 addNewRow();
+						 }
+						 
+						 //summary
+						 var summary=result.summary;
+						 $('#sale_sheet_dan_hao').val(summary.danhao);
+						 $('#sale_sheet_date').datetimebox('setValue',summary.date);
+						 $('#sale_sheet_cangku').combobox('setValue', summary.cangKu);
+						 $('#sale_sheet_beizhu').val(summary.beizhu);
+						 $('#fapiao_leixing').combobox('setValue', summary.faPiaoLeiXing);
+						 $('#dept').combobox('setValue', summary.deptMc);
+						 $('#employee').combobox('setValue', summary.jingbanren);
+						 $('#jiesuanfangshi').combobox('setValue', summary.jieSuanFangShi);
+						 //ying shou huo kuan
+						 var yshk=result.yshk;
+						 if(yshk==null)
+						 {
+							 $('#sale_sheet_cqqkze').val('0');
+						 }
+						 else
+						 {
+							 $('#sale_sheet_cqqkze').val(yshk.yshQM);
+						 }
+						 //kehu
+						 var kehu=result.kehu;
+						 if(kehu!=null)
+						 {
+							 $('#sale_sheet_kehuNo').val(kehu.kehuNo);
+							 $('#sale_sheet_lxr').val(kehu.kehuXm);
+							 $('#sale_sheet_name').val(kehu.kehuMc);
+							 $('#sale_sheet_tel').val(kehu.kehuDh);
+						 }
+						 else
+						{
+							 $('#sale_sheet_kehuNo').val("");
+							 $('#sale_sheet_lxr').val("");
+							 $('#sale_sheet_name').val("");
+							 $('#sale_sheet_tel').val("");
+						}
+
+					}
+					
+				});
+			};
+			/**
+			 * click 'save' button
+			 */
+			saleData.save=function()
+			{
+				//end editing before getting changes
+				SaleItemUI.endEditAllRows();
+				//getChanges
+				var rows_inserted=$('#datagird_sale_item').datagrid('getChanges',"inserted");
+				var rows_deleted=$('#datagird_sale_item').datagrid('getChanges',"deleted");
+				var rows_updated=$('#datagird_sale_item').datagrid('getChanges',"updated");
+				
+				console.log("inserted:"+rows_inserted);
+				console.log("deleted:"+rows_deleted);
+				console.log("updated:"+rows_updated);
+				
+				//acceptChanges
+				$('#datagird_sale_item').datagrid("acceptChanges");
+				
+				//edit all rows
+				SaleItemUI.editAllRows();
+				
+				
+				
+			};
+			
+			return saleData;
+		}
+};
+var EmployeeData={
+		createNew:function()
+		{
+			var employeeData={};
+			employeeData.onSelectForDepartment=function(record){
+				var deptName=$('#dept').combobox('getText');
+				$.ajax({
+					url: '../employee/list',
+					data:{'deptName':deptName},
+					type: 'POST',
+					dataType: 'json',
+					timeout: 100000,
+					success: function(result){
+						 $('#employee').combobox('loadData',result);
+					}
+					
+				});
+			};
+			return employeeData;
+		}
+		
+};

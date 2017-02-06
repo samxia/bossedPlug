@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- <properties> <property name="driver" value="com.mysql.jdbc.Driver" 
+		/> <property name="url" value="jdbc:mysql://localhost:3306/module" /> <property 
+		name="username" value="root" /> <property name="password" value="" /> </properties> -->
+	<properties>
+		<property name="driver" value="net.sourceforge.jtds.jdbc.Driver" />
+		<property name="url"
+			value="jdbc:jtds:sqlserver://127.0.0.1:1433;DatabaseName=yzbp50_ltp" />
+		<property name="username" value="sa" />
+		<property name="password" value="1" />
+	</properties>
+	<!-- Setup the transaction manager and data source that are appropriate 
+		for your environment -->
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC">
+			</transactionManager>
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}" />
+				<property name="url" value="${url}" />
+				<property name="username" value="${username}" />
+				<property name="password" value="${password}" />
+			</dataSource>
+		</environment>
+	</environments>
+
+	<mappers>
+		<!-- XML mapper files should be listed here -->
+		<mapper resource="com/xym/bossed/db/mybatis/fapiao/FaPiaoMapper.xml" />
+		<mapper resource="com/xym/bossed/db/mybatis/danhao/DanHaoMapper.xml" />
+		<mapper resource="com/xym/bossed/db/mybatis/kehu/KehuMapper.xml"/>
+		<mapper resource="com/xym/bossed/db/mybatis/kehu/leibie/KehuLeibieMapper.xml"/>
+		<mapper resource="com/xym/bossed/db/mybatis/gys/leibie/GongYSLeibieMapper.xml"/>
+		<mapper resource="com/xym/bossed/db/mybatis/procedure/ProcedureMapper.xml"/>
+		<mapper resource="com/xym/bossed/db/mybatis/contact/category/ContactCategoryMapper.xml"/>
+		<mapper resource="com/xym/bossed/db/mybatis/picture/PictureMapper.xml"/>
+		<mapper resource="com/xym/bossed/db/mybatis/log/LogMapper.xml"/>
+	</mappers>
+
+</configuration>

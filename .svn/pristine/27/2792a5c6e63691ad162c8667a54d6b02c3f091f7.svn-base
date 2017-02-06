@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+      <applet code=applet.Camera.class archive="jarApplet.jar" WIDTH=500 HEIGHT=400  id="id_camera">
+      </applet>
+      <button onclick="test()">click here</button>
+      <script type="text/javascript">
+      function test()
+      {
+		//alert(document.applets[0].testInvoke());
+		alert(document.id_camera.testInvoke());
+      }
+      function takePhoto()
+      {
+          
+      }
+      </script>
+      
+</body>
+</html>

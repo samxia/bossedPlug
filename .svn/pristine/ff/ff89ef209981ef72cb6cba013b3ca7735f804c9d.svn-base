@@ -1,0 +1,162 @@
+var DgSaleItemUI={
+		//DgSaleItemUI.createNew()
+		createNew:function()
+		{
+			var dgSaleItemUI={};
+			
+			dgSaleItemUI.init=function(){
+				dgSaleItemUI.regEvent();
+			};
+			
+			//edit all rows
+			dgSaleItemUI.editAllRows=function(){
+				
+				var rows=$('#datagird_sale_item').datagrid('getRows');
+				for(var i=0;i<rows.length;i++)
+				{
+				  $('#datagird_sale_item').datagrid('beginEdit', i);
+				  SaleItemUI.setEditingForCaculation(i);
+				}
+			};
+			//End edit all rows
+			dgSaleItemUI.endEditAllRows=function(){
+				
+				var rows=$('#datagird_sale_item').datagrid('getRows');
+				for(var i=0;i<rows.length;i++)
+				{
+				  $('#datagird_sale_item').datagrid('endEdit', i);
+				}
+			};
+			//caculate suliang*price=amount
+			dgSaleItemUI.setEditingForCaculation=function(rowIndex)
+			{
+				var editor_shuLiang = $('#datagird_sale_item').datagrid('getEditor', {index:rowIndex,field:'shuLiang'});
+				var editor_price=$('#datagird_sale_item').datagrid('getEditor', {index:rowIndex,field:'buHanShuiDanJia'});
+				var editor_amount=$('#datagird_sale_item').datagrid('getEditor', {index:rowIndex,field:'buHanShuiJinE'});
+				
+				editor_shuLiang.target.bind('change',function(){
+					calculateByShuliangAndPrice();
+					dgSaleItemUI.caculateFooter();//refresh footer
+				});
+				editor_price.target.bind('change',function(){
+					calculateByShuliangAndPrice();
+					dgSaleItemUI.caculateFooter();//refresh footer
+				});
+				editor_amount.target.bind('change',function(){
+					calculateByAmountAndShuLiang();
+					dgSaleItemUI.caculateFooter();//refresh footer
+				});
+				
+				 function calculateByShuliangAndPrice(){
+					 var amount=editor_shuLiang.target.val()*editor_price.target.val();
+					 $(editor_amount.target).numberbox('setValue',amount);
+				 }
+				 //calc price=amount/shuliang
+				 function calculateByAmountAndShuLiang()
+				 {
+					 if(editor_shuLiang.target.val()==0)
+					 {
+						 return;
+					 }
+					 var price=editor_amount.target.val()/editor_shuLiang.target.val();
+					 $(editor_price.target).numberbox('setValue',price);
+				 }
+				
+			     
+			};
+			//calculate amount
+			dgSaleItemUI.caculateFooter=function()
+			{
+				var rows=$('#datagird_sale_item').datagrid('getRows');
+				var count=rows.length;
+				var sum_shuLiang=0,sum_jinE=0;
+				for(var i=0;i<count;i++)
+				{
+					sum_shuLiang=sum_shuLiang-(-$('#datagird_sale_item').datagrid('getEditor', {index:i,field:'shuLiang'}).target.val());
+					sum_jinE=sum_jinE-(-$('#datagird_sale_item').datagrid('getEditor', {index:i,field:'buHanShuiJinE'}).target.val());
+				}
+				dgSaleItemUI.setFooterUI(count,sum_shuLiang,sum_jinE);
+				
+			};
+			//set footer UI
+			dgSaleItemUI.setFooterUI=function(count,sum_shuLiang,sum_jinE)
+			{
+				//getFooterRows
+				var footers=$('#datagird_sale_item').datagrid('getFooterRows');
+				if(footers==null)
+				{return;}
+				var footer=footers[0];
+				footer['mingCheng']="记录数："+count;
+				footer['shuLiang']=sum_shuLiang;
+				footer['buHanShuiJinE']=sum_jinE;
+					
+				$('#datagird_sale_item').datagrid('reloadFooter');
+			};
+			
+			//onLoadSuccess
+			dgSaleItemUI.onLoadSuccess=function()
+			{
+				dgSaleItemUI.editAllRows();
+				dgSaleItemUI.caculateFooter();
+				
+			};
+			//open price refer window and pass the arguments.
+			dgSaleItemUI.openPriceRefer=function(event)
+			{
+				//get cangku daima
+				var cangkDm=$('#sale_sheet_cangku').combobox('getValue');
+				if(cangkDm=="")
+				{
+					alert("查询参考价格前，请选择仓库。");
+					return;
+				}
+				//alert(cangkDm);
+				
+				//get kehu no
+				var kehuNo=$('#sale_sheet_kehuNo').val();
+				if(kehuNo=="")
+				{
+					alert("查询参考价格前，请选择客户。");
+					return;
+				}
+				
+				//get parts bian ma
+			//	var row=$('#datagird_sale_item').datagrid('getSelected');
+			//	var rowIndex=$('#datagird_sale_item').datagrid('getRowIndex',row);
+				var rowIndex=getFocusedRowIndex(event);
+				//alert(rowIndex);
+				var editor_bianma= $('#datagird_sale_item').datagrid('getEditor', {index:rowIndex,field:'bianMa'});
+				var partsNo=editor_bianma.target.val();
+				if(partsNo=="")
+				{
+					alert("查询参考价格前，请选择配件。");
+					return;
+				}
+				
+				 //--------------
+				var editor_danjian= $('#datagird_sale_item').datagrid('getEditor', {index:rowIndex,field:'buHanShuiDanJia'});
+				var target=editor_danjian.target;
+				
+				//---------------
+				
+			   $('#datagird_sale_item').datagrid('loading');
+			   ReferPrice.open(kehuNo,partsNo,cangkDm,target);
+			   $('#datagird_sale_item').datagrid('loaded');
+			
+			};
+			//reg event
+			dgSaleItemUI.regEvent=function(){
+				$('#div_sale_sheet_workspace').keypress(function(e){
+					//console.log('keyCode='+e.keyCode);
+					//console.log('which='+e.which);
+					//F3
+					if(e.keyCode==114){
+						dgSaleItemUI.openPriceRefer(e);
+						e.preventDefault();  
+						e.stopPropagation();
+					}
+				});
+			};
+			return dgSaleItemUI;
+		}
+};

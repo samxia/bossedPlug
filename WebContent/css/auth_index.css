@@ -1,0 +1,25 @@
+.form {
+	margin: 0;
+	padding: 10px 30px;
+}
+
+.title {
+	font-size: 16px;
+	font-weight: bold;
+	padding: 10px 0;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #ccc;
+}
+
+.form_item {
+	margin-bottom: 5px;
+}
+.form_item input{
+	height: 20px;
+	width: 340px;
+	font-size: 15px;
+}
+.form_item label {
+	display: inline-block;
+	width: 120px;
+}

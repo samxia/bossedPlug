@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xym.bossed.db.mybatis.realm.RealmMapper">
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+	<sql id="User_Base_Column_List">
+		Id as user_id,caozuoyuan_xm,caozuoyuan_password
+	</sql>
+	<resultMap type="User" id="userResult_without_roles">
+		<id property="id" column="user_id" />
+		<result property="userName" column="caozuoyuan_xm" />
+	</resultMap>
+	<resultMap type="User" id="userResult">
+		<id property="id" column="user_id" />
+		<result property="userName" column="caozuoyuan_xm" />
+		<result property="password" column="caozuoyuan_password" />
+		<collection property="roleList" javaType="ArrayList"
+			column="user_id" ofType="Role" select="selectRolesForUser" />
+	</resultMap>
+	<resultMap type="Role" id="roleResult">
+		<id property="id" column="role_id" />
+		<result property="roleName" column="role_name" />
+		<collection property="permissionList" column="role_id"
+			ofType="Permission" select="selectPermissionsForRole"></collection>
+	</resultMap>
+	<resultMap type="Permission" id="permissionResult">
+		<id property="id" column="permission_id" />
+		<result property="permissionName" column="permission_name" />
+		<result property="memo" column="memo" />
+		<result property="groupName" column="group_name" />
+	</resultMap>
+	<select id="selectUserByName" parameterType="java.lang.String"
+		resultMap="userResult">
+		select
+		<include refid="User_Base_Column_List" />
+		from
+		sm_caozuoyuan
+		where caozuoyuan_xm=#{userName}
+	</select>
+	<select id="selectRolesForUser" parameterType="int" resultMap="roleResult">
+		select role_id,role_name,memo from x_user_role,x_role where
+		user_id=#{user_id} and role_id=x_role.id
+	</select>
+	<select id="selectRolesByUser" parameterType="User" resultType="Role" >
+		select role_id as id,role_name as roleName,memo from x_user_role,x_role where
+		user_id=#{id} and role_id=x_role.id
+	</select>
+	<select id="selectPermissionsForRole" parameterType="int"
+		resultMap="permissionResult">
+		select permission_id,permission_name,memo,group_name from
+		x_role_permission,x_permission
+		where role_id=#{role_id} and
+		permission_id=x_permission.id
+	</select>
+	<select id="selectAllUser" resultMap="userResult_without_roles">
+		select 
+		<include refid="User_Base_Column_List" /> 
+		from sm_caozuoyuan
+	</select>
+	<select id="selectAllRole" resultType="Role">
+	   select id,role_name as roleName,memo from x_role
+	</select>
+	<select id="selectAllPermission" resultType="Permission">
+	   select id,permission_name as permissionName,memo,group_name as groupName from x_permission
+	</select>
+	<select id="selectRoleByName" parameterType="Role" resultType="Role">
+		select * from x_role
+		where role_name=#{roleName}
+	</select>
+	<insert id="insertRole" parameterType="Role">
+		insert into x_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleName != null">
+				role_name,
+			</if>
+			<if test="memo != null">
+				memo,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="roleName != null">
+				#{roleName,jdbcType=VARCHAR},
+			</if>
+			<if test="memo != null">
+				#{memo,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="selectUsersByRole" parameterType="Role" resultType="User" >
+		select u.Id as id,caozuoyuan_xm as userName 
+		from x_user_role,sm_caozuoyuan u 
+		where role_id=#{id} and user_id=u.Id
+	</select>
+	<delete id="deleteRole" parameterType="Role">
+		delete from x_role 
+		where id=#{id} and role_name=#{roleName}
+	</delete>
+	<update id="updateRole" parameterType="Role">
+		update x_role
+		set role_name=#{roleName,jdbcType=VARCHAR},
+		memo=#{memo,jdbcType=VARCHAR}
+		where id=#{id,jdbcType=INTEGER}
+	</update>
+	<insert id="insertPerm" parameterType="Permission">
+		insert into x_permission
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="permissionName!=null">
+				permission_name,
+			</if>
+			<if test="memo!=null">
+				memo,
+			</if>
+			<if test="groupName!=null">
+				group_name,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="permissionName!=null">
+				#{permissionName,jdbcType=VARCHAR},
+			</if>
+			<if test="memo!=null">
+				#{memo,jdbcType=VARCHAR},
+			</if>
+			<if test="groupName!=null">
+				#{groupName,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updatePerm" parameterType="Permission">
+		update x_permission
+		set permission_name=#{permissionName,jdbcType=VARCHAR},
+		memo=#{memo,jdbcType=VARCHAR},
+		group_name=#{groupName,jdbcType=VARCHAR}
+		where id=#{id,jdbcType=INTEGER}
+	</update>
+	<delete id="deletePerm" parameterType="Permission">
+		delete from x_permission 
+		where id=#{id} and permission_name=#{permissionName}
+	</delete>
+	<select id="selectPermissionByName" parameterType="Permission" resultType="Permission">
+		select id,permission_name as permissionName,memo,group_name as groupName
+		from x_permission
+		where permission_name=#{permissionName}
+	</select>
+	<select id="selectDistinctGroupNameForPermission" resultType="java.lang.String">
+		SELECT DISTINCT group_name
+        FROM x_permission 
+		where (group_name IS NOT NULL)
+	</select>
+	<select id="selectRolesByPermission" parameterType="Permission" resultType="Role">
+		select r.id,r.role_name as roleName,r.memo 
+		from x_role r,x_role_permission p
+		where p.permission_id=#{id} and p.role_id=r.id
+	</select>
+	<insert id="insertRelationBetweenUserAndRole" parameterType="java.util.Map">
+		insert into x_user_role 
+		(user_id,role_id) values (#{user_id},#{role_id})
+	</insert>
+	<delete id="deleteRelationBetweenUserAndRole" parameterType="java.util.Map">
+		delete from x_user_role
+		where user_id=#{user_id} and role_id=#{role_id}
+	</delete>
+	<insert id="insertRelationBetweenRoleAndPermission" parameterType="java.util.Map">
+		insert into x_role_permission
+		(role_id,permission_id) values (#{role_id},#{permission_id})
+	</insert>
+	<delete id="deleteRelationBetweenRoleAndPermission" parameterType="java.util.Map">
+		delete from x_role_permission
+		where role_id=#{role_id} and permission_id=#{permission_id}
+	</delete>
+</mapper>

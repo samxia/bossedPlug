@@ -1,0 +1,34 @@
+package com.xym.bossed.security.login;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+public class UserService implements UserDetailsService{
+
+	@Override
+	public UserDetails loadUserByUsername(String username)
+			throws UsernameNotFoundException {
+		UserDetailsImpl ud=new UserDetailsImpl();
+		ud.setUsername("xym");
+		ud.setPassword("69e9f6c4132402948e83ad1a64b55c550697ea0f0cd500653760a42ed199469777fd84aea789b64e");
+		ud.setAccountNonExpired(true);
+		ud.setAccountNonLocked(true);
+		ud.setCredentialsNonExpired(true);
+		ud.setEnabled(true);
+		
+		GrantedAuthorityImpl ga=new GrantedAuthorityImpl();
+		ga.setAuthority("ROLE_BOSS");
+		Collection c=new ArrayList();
+		c.add(ga);
+		
+		ud.setAuthorities(c);
+		
+		return ud;
+	}
+
+}

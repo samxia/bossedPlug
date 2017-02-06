@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xym.bossed.db.mybatis.dept.DepartmentMapper">
+<cache/>
+	<select id="getAllDepartment" resultType="com.xym.bossed.db.mybatis.dept.Department">
+		select reco_no as recoNo,dept_mc as name,bm_bz as beiZhu,
+				danw_mc as danwMC, danw_dm as danwDM
+		from sm_dept
+	</select>
+</mapper>

@@ -1,0 +1,10 @@
+<servlet>
+	<description></description> 
+	<display-name>FapiaoSearch</display-name>
+	<servlet-name>FapiaoSearch</servlet-name>
+	<servlet-class>com.xym.bossed.servlet.fapiao.FapiaoSearch</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>FapiaoSearch</servlet-name>
+	<url-pattern>/fapiao/search</url-pattern>
+</servlet-mapping>

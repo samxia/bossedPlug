@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xym.bossed.db.mybatis.procedure.ProcedureMapper">
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+	<select id="check_before_delete" statementType="PREPARED" resultType="INTEGER" useCache="false">
+	  <!--    {call sp_proinfo_delete(#{info_no,mode=IN,jdbcType=VARCHAR},#{info_type,mode=IN,jdbcType=INTEGER})}-->
+	 <!--declare @r int exec @r=sp_proinfo_delete;1 'JLSJHLCHY', 1102 select @r as result-->
+	 declare @r int; exec @r=sp_proinfo_delete;1 #{info_no}, #{info_type} ;select @r as result
+	</select>
+	<select id="getPriceByProcudure" statementType="CALLABLE"  parameterType="java.util.Map" useCache="true" resultType="java.util.Map">
+
+		<!-- exec sp_return_def_price;1 #{priceCode}, #{cangKuDaiMa}, #{kehuNo} output, #{peijNo}, #{price} output, #{yeWuDanHao} output, #{yeWuDate} output; -->
+
+	{call sp_return_def_price(#{priceCode}, #{cangKuDaiMa}, #{kehuNo,mode=INOUT,jdbcType=VARCHAR},
+	 #{peijNo}, #{price,mode=INOUT,jdbcType=NUMERIC}, #{yeWuDanHao,mode=INOUT,jdbcType=VARCHAR}, 
+	 #{yeWuDate,mode=OUT,jdbcType=DATE})}
+	</select>
+</mapper>

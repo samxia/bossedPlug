@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<link rel="stylesheet" type="text/css"
+	href="../js/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css"
+	href="../js/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="../js/easyui/demo/demo.css">
+<script type="text/javascript" src="../js/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="../js/easyui/jquery.easyui.min.js"></script>
+</head>
+<body>
+	
+	<div class="easyui-panel" title="登录"
+		style="width:500px; padding: 10px;" id="div_login">
+		<form id="ff" action="../login_check" method="post">
+			<table>
+				<tr>
+					<td>用户名:</td>
+					<td><input name="name" type="text"
+						data-options="required:true" class="easyui-validatebox" id="nm"></input></td>
+				</tr>
+				<tr>
+					<td>密 码:</td>
+					<td><input name="password" type="password"
+						data-options="required:true" class="easyui-validatebox" id="pwd"></input></td>
+				<tr>
+					<td></td>
+					<td><input type="submit" value="Login"
+						onclick="javascript:return checkBeforeSubmit()"></input></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div id="div_msg" class="easyui-panel" title="Message" style="width:500px;height:200px;padding:10px" data-options="closed:true">
+		
+	</div>
+	<script type="text/javascript">
+    function checkBeforeSubmit()
+    {
+       showMsg("");
+       var name=$('#nm')[0].value;
+       var password=$('#pwd')[0].value;
+       if(name.length==0 || password.length==0)
+       {
+           
+    	   // $.messager.alert('Info', "请输入用户名和密码", 'info');
+    	   showMsg("请输入用户名和密码");
+            return false;
+       }
+    	    
+    }
+ 
+	</script>
+
+	<script type="text/javascript">
+		$(function(){
+		$('#ff').form({
+		success:function(data){
+			handleResponse(data);
+		}
+		});
+		});
+		function handleResponse(res)
+		{
+			var arr_str;
+			arr_str=res.split(":");
+			if(arr_str.length!=0)
+			{
+				if(arr_str[0]=="redirect")//if startwith "redirect:",indict login is ok.
+				{
+					if(arr_str[1].indexOf("http")==0)//if start with http,then redirect to the url.
+					{
+						showMsg(arr_str[1]);
+						return;
+					}
+					showMsg("R:"+arr_str[1]);
+					return;
+				}
+			}
+			showMsg(res);
+						
+			//$.messager.alert('Info', res, 'info');
+		}
+		function showMsg(msg)
+		{
+			$('#div_msg')[0].innerHTML=msg;
+			$('#div_msg').panel('open');
+		}
+	</script>
+</body>
+</html>

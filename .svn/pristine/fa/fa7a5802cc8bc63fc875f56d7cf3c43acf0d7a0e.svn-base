@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="utf-8">
+		<link type="text/css" href="../js/pikachoose-4.5.0/styles/bottom.css" rel="stylesheet" />
+		<script type="text/javascript" src="../js/easyui/jquery.min.js"></script>
+        <script type="text/javascript" src="../js/pikachoose-4.5.0/lib/jquery.jcarousel.min.js"></script>
+		<script type="text/javascript" src="../js/pikachoose-4.5.0/lib/jquery.pikachoose.min.js"></script>
+		<script type="text/javascript" src="../js/easyui/jquery.easyui.min.js"></script>
+		<script type="text/javascript" src="../js/util/util.js"></script>
+		<script language="javascript">
+			$(document).ready(
+				function (){
+			/* 		var a = [
+						{"image":"../js/pikachoose-4.5.0/1.jpg","caption":"Any donation is appreciated. PikaChoose is free to use!","link":"http://pikachoose.com","title":"Image 1"},
+						{"image":"../js/pikachoose-4.5.0/2.jpg","caption":"Be sure to check out <a href=\"http://www.pikachoose.com\">PikaChoose.com</a> for updates.","link":"http://pikachoose.com","title":"Image 2"},
+						{"image":"../js/pikachoose-4.5.0/3.jpg","caption":"You can use any type of html you want with PikaChoose","title":"Image 3"}
+						]; */
+					 $.post("../pic/list",{owner_id:utilGetQueryString("owner_id")},function(result){
+						if(result.indexOf("div_login")!=-1)
+						{
+							$("#id_msg").html(result);
+                           return false;
+						}
+						    $("#id_pikachoose").PikaChoose({data:eval(result),text: {previous: "上一个", next: "下一个" },autoPlay:false});
+						  });
+					
+				});
+		</script>
+</head>
+<body>
+<div id="id_pikachoose">
+	
+</div>
+<div id="id_msg"></div>
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+<servlet>
+	<description></description> 
+	<display-name>DanWeiList</display-name>
+	<servlet-name>DanWeiList</servlet-name>
+	<servlet-class>com.xym.bossed.servlet.danwei.DanWeiList</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>DanWeiList</servlet-name>
+	<url-pattern>/danwei/list</url-pattern>
+</servlet-mapping>

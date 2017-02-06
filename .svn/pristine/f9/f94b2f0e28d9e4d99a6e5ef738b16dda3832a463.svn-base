@@ -1,0 +1,29 @@
+package com.xym.bossed.service;
+
+import java.util.Date;
+import java.util.List;
+
+import com.xym.bossed.db.mybatis.log.Log;
+import com.xym.bossed.db.mybatis.log.LogDAO;
+import com.xym.bossed.db.mybatis.log.LogExample;
+import com.xym.bossed.security.SecurityService;
+
+public class LogService {
+
+	public int createLog(Log log) {
+		return new LogDAO().insertSelective(log);
+	}
+
+	public List<Log> getLogListByStartDate(Date date) {
+		LogDAO dao=new LogDAO();
+		LogExample e=new LogExample();
+		e.or().andTimeGreaterThanOrEqualTo(date);
+		return dao.selectByExample(e);
+	}
+	public List<Log> getLogListByStartDateAndChannel(Date date,String channel) {
+		LogDAO dao=new LogDAO();
+		LogExample e=new LogExample();
+		e.or().andTimeGreaterThanOrEqualTo(date).andChannelEqualTo(channel);
+		return dao.selectByExample(e);
+	}
+}

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>批量导入发票</title>
+<link rel="stylesheet" type="text/css"
+	href="../js/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css"
+	href="../js/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="../js/easyui/demo/demo.css">
+<script type="text/javascript" src="../js/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="../js/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/util/util.js"></script>
+<script type="text/javascript" src="../js/util/jquery.json.2.4.js"></script>
+</head>
+<body>
+	<!--  
+1.上传 
+2.java读取csv
+3.在页面上列出、预览
+4.mybatis 操作存储过程，取得开票号码  ---done
+5.选择日期段，提交json，插入到数据库
+-->
+
+	<div class="easyui-panel" title="上传发票csv文件"
+		style="width: 400px; padding: 10px;">
+		<form id="fileupload" action="../upload" method="POST"
+			enctype="multipart/form-data">
+			<input type="file" name="files[]" id="fileName"></input>
+			<button type="submit">上传</button>
+		</form>
+	</div>
+	<div class="easyui-panel" title="选择csv文件"
+		style="width: 400px; padding: 10px;">
+		<a href="#" class="easyui-linkbutton"
+			data-options="iconCls:'icon-search'" onclick="openWindow()">查看上传文件</a>
+	</div>
+	<div id="w" class="easyui-window" title="服务器上的文件列表"
+		data-options="iconCls:'icon-search',modal:true,closed:true"
+		style="width: 800px; height: 400px; padding: 10px;">
+		<table id="dg_files" class="easyui-datagrid" title="文件列表"
+			style="width: 750px; height: 350px"
+			data-options="singleSelect:true,collapsible:false,url:'../upload/list',
+		fitColumns:false,rownumbers:true,showFooter:true,remoteSort:false,toolbar:'#tb'">
+			<thead>
+				<tr>
+					<th data-options="field:'ck',checkbox:true"></th>
+					<th data-options="field:'name',width:300" sortable="true">名称</th>
+					<th data-options="field:'length',width:60" sortable="true">大小</th>
+				</tr>
+			</thead>
+		</table>
+		<div id="tb" style="padding: 5px; height: auto">
+			<div style="margin-bottom: 5px">
+				<a href="#" class="easyui-linkbutton" iconCls="icon-remove"
+					plain="true" onclick="delFile()">删除</a> <a href="#"
+					class="easyui-linkbutton" iconCls="icon-open" plain="true"
+					onclick="openCSV()">打开文件</a>
+			</div>
+		</div>
+	</div>
+	<div id="w_csv" class="easyui-window" title="打开CSV文件"
+		data-options="iconCls:'icon-search',
+	modal:true,closed:true"
+		style="width: 1000px; height: 600px; padding: 10px;">
+		<div>
+			<table id="dg_csv" class="easyui-datagrid" title="CSV发票文件"
+				style="width: 950px; height: 480px"
+				data-options="singleSelect:false,collapsible:false,url:'csv',
+		fitColumns:false,rownumbers:true,showFooter:true,remoteSort:false,toolbar:'#tb_csv',rowStyler:colorDataGridRow">
+				<thead>
+					<tr>
+						<th data-options="field:'ck',checkbox:true"></th>
+						<th data-options="field:'fapiao_daima',width:110" sortable="true">发票代码</th>
+						<th data-options="field:'kaipFpno',width:70" sortable="true">发票号码</th>
+						<th
+							data-options="field:'kaipRq',width:70,formatter:formateCellKaipRq"
+							sortable="true">开票日期</th>
+						<th
+							data-options="field:'kaipValidity',width:40,formatter:formatCellKaipValidaty"
+							sortable="true">状态</th>
+						<th data-options="field:'kehuSh',width:120" sortable="true">购方识别号</th>
+						<th data-options="field:'kehuMc',width:200" sortable="true">购方名称</th>
+						<th data-options="field:'kaipDfje',width:60" sortable="true">金额合计</th>
+						<th data-options="field:'kaipCzy',width:60" sortable="true">开票人</th>
+						<th data-options="field:'shoukuanren',width:60" sortable="true">收款人</th>
+						<th data-options="field:'save_Return_Value',width:60,hidden:false">RV</th>
+					</tr>
+				</thead>
+			</table>
+			<div class="demo-info" style="display: none" id="div_info">
+				<div class="demo-tip icon-tip">&nbsp;</div>
+				<div>红色行-服务器中已经存在的记录，绿色行-保存成功的记录。</div>
+			</div>
+			<div id="tb_csv" style="padding: 5px; height: auto">
+				<div style="margin-bottom: 5px">
+					<a href="#" class="easyui-linkbutton" iconCls="icon-save"
+						plain="true" onclick="getSelections()" id="button_save_to_db">存入数据库</a>
+				</div>
+				<div style="margin-bottom: 3px">
+					<input type="hidden" id="hiddenField_csv" value=""> Date
+					From: <input class="easyui-datebox" style="width: 100px"
+						data-options="formatter:Util.createNew().dateFormatter,required:true,validType:'riqi'"
+						id="date_start" /> To: <input class="easyui-datebox"
+						style="width: 100px"
+						data-options="formatter:Util.createNew().dateFormatter,required:true,validType:'riqi'"
+						id="date_end" /> <a href="#" id="search"
+						class="easyui-linkbutton" iconCls="icon-search"
+						onclick="searchByDate()">Search</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript"> 
+	function formatCellKaipValidaty(value,row,index){
+		if(value=="正常"||value=="作废") return value;
+		if(row.kaipFpno.indexOf("记录")==false) return "";
+		if (value){
+			return "有效";
+		} else {
+			return "作废";
+		}}
+		function formateCellKaipRq(value,row,index)
+		{
+			if(typeof(value)=="string") return value;
+			if(row.kaipFpno.indexOf("记录")==false) return "";
+			var date = new Date(value.time);
+			return date.toLocaleDateString();
+			//return value;
+		}
+		function colorDataGridRow(index,row)
+		{
+			if(row.save_Return_Value==null)return ;
+			if(row.save_Return_Value==3)
+			{
+				return 'background-color:#FF2D18;color:#fff;';
+			}
+			else if(row.save_Return_Value==1)
+			{
+				return 'background-color:#39FF0C;color:#fff;';
+			}
+
+			
+		} 
+	function getSelections(){  
+        var ss = [];  
+        var rows = $('#dg_csv').datagrid('getSelections');  
+        if(rows.length==0)
+        {
+        	$.messager.alert('Info', "请选择想保存的项目","Info");  
+        	return false;
+        }
+        $.messager.progress();
+        htmlobj=$.ajax({
+        	type:"POST",
+            url:"savelist",
+			data:{fapiao_list:$.toJSON(rows)},
+			async:false,
+			contentType:"application/x-www-form-urlencoded; charset=utf-8",
+			dataType:"json",
+			success:function(msg){
+				$('#dg_csv').datagrid('loadData',msg);
+				$('#button_save_to_db').linkbutton('disable');
+				$.messager.progress('close');
+				$("#div_info").slideDown();
+				}
+			});
+		
+    }  
+	function searchByDate()
+	{
+		var dt_start=$('#date_start').datebox('getValue');
+		var dt_end=$('#date_end').datebox('getValue');
+		if (dt_start==""||dt_start=="") return false;
+	    $('#dg_csv').datagrid('load', {  
+	    	date_start: dt_start,  
+	    	date_end: dt_end,
+	    	str_fileName: $('#hiddenField_csv')[0].value
+	    });  
+	    $('#button_save_to_db').linkbutton('enable');
+	    $("#div_info").hide();
+	}
+	function openCSV()
+	{
+		//未选择
+		if($('#dg_files').datagrid('getChecked')==false)
+		{
+			$.messager.alert('Info', "打开前，请先选择CSV文件.", 'info'); 
+			return;
+		}
+		//判断扩展名
+		var fname=$('#dg_files').datagrid('getChecked')[0].name;
+		var ext=fname.substring(fname.length-4,fname.length).toLowerCase();//取文件名后四位
+		if(!(ext==".csv"))
+		{
+			$.messager.alert('Info', "此文件为:["+ext+"]文件,请先选择类型为CSV的文件.", 'info'); 
+			return false;
+		}
+		//给hiddenField_csv赋值为要打开的文件名
+		$('#hiddenField_csv').val(fname);
+		//alert($('#hiddenField_csv')[0].value);
+		
+		//关闭文件列表窗口
+		$('#w').window('close');
+
+		//打开csv文件显示窗口
+		$('#w_csv').window('open');
+
+	    $('#dg_csv').datagrid('load', {  
+	         str_fileName: $('#hiddenField_csv')[0].value
+	    });  
+	    
+	    $('#button_save_to_db').linkbutton('enable');
+	    $("#div_info").hide();
+	}
+	function delFile()
+	{
+		if($('#dg_files').datagrid('getChecked')==false)
+		{
+			alert("删除前，请先选择文件。");
+			return;
+		}
+		//alert($('#dg_files').datagrid('getChecked')[0].name);
+		var fname=$('#dg_files').datagrid('getChecked')[0].name;
+		if(confirm("确信删除文件："+fname) == true)
+		{
+			htmlobj=$.ajax({url:"../upload",
+				data:{delfile:encodeURIComponent(fname)},
+				async:false,
+				contentType:"application/x-www-form-urlencoded; charset=utf-8"});
+			var rt=htmlobj.responseText;
+			if(rt.indexOf("fail")!=-1){
+				alert(rt);
+				return;
+			}
+			$('#dg_files').datagrid('reload');
+		}
+	
+	}
+	function openWindow()
+	{
+		$('#w').window('open');
+		$('#dg_files').datagrid('reload');
+	}
+        $(function(){  
+            $('#fileupload').form({  
+                success:function(data){  
+                	var data = eval('(' + data + ')');  // change the JSON string to javascript object  
+                	$.messager.progress('close');
+                    $.messager.alert('Info', "上传文件【"+data[0].name+"】成功", 'info');  
+                },
+                onSubmit: function(param){  
+                  if($('#fileName').get(0).value=="")
+                   {
+                	  $.messager.alert('Info', "上传前请选择文件", 'info');  
+                	  return;
+                   }
+                	$.messager.progress();
+                    return true;
+                }
+            });  
+        });  
+   	 $.extend($.fn.validatebox.defaults.rules, {  
+         riqi: {  
+             validator: function(value, param){
+                /* var d1 = $.fn.datebox.defaults.parser(param[0]);  
+                 var d2 = $.fn.datebox.defaults.parser(value);  
+                 return d2<=d1;  */
+                 return Util.createNew().isDate(value);
+             },  
+             message: '请输入有效日期.'  
+         }  
+     }) 
+    </script>
+
+</body>
+</html>

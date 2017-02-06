@@ -1,0 +1,10 @@
+<servlet>
+	<description></description> 
+	<display-name>ContactList</display-name>
+	<servlet-name>ContactList</servlet-name>
+	<servlet-class>com.xym.bossed.servlet.contact.ContactList</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>ContactList</servlet-name>
+	<url-pattern>/contacts/list</url-pattern>
+</servlet-mapping>

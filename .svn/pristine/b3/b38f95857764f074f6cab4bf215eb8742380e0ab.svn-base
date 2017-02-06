@@ -1,0 +1,18 @@
+package com.xym.bossed.security.login;
+
+import org.springframework.security.core.GrantedAuthority;
+
+public class GrantedAuthorityImpl implements GrantedAuthority{
+
+	private String authority;
+	@Override
+	public String getAuthority() {
+		// TODO Auto-generated method stub
+		return this.authority;
+	}
+	public void setAuthority(String authority)
+	{
+		this.authority=authority;
+	}
+
+}

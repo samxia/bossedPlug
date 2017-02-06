@@ -1,0 +1,50 @@
+package com.xym.bossed.servlet.fapiao;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONObject;
+
+import com.xym.bossed.db.mybatis.fapiao.FaPiao;
+import com.xym.bossed.service.FaPiaoService;
+
+/**
+ * Servlet implementation class FapiaoSearch
+ */
+public class FapiaoSearch extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public FapiaoSearch() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		this.doPost(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html;charset=UTF-8"); 
+		FaPiaoService fs=new FaPiaoService();
+		List<FaPiao> allFapiao=fs.listAllFapiao();
+		JSONObject jo = new JSONObject();
+		jo.put("total",allFapiao.size());
+		jo.put("rows", allFapiao);
+		response.getWriter().println(jo.toString());
+	}
+
+}

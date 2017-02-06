@@ -1,0 +1,10 @@
+<servlet>
+	<description></description> 
+	<display-name>SalePriceSearch</display-name>
+	<servlet-name>SalePriceSearch</servlet-name>
+	<servlet-class>com.xym.bossed.servlet.price.sale.SalePriceSearch</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>SalePriceSearch</servlet-name>
+	<url-pattern>/price/sale/search</url-pattern>
+</servlet-mapping>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>menu</title>
+<link rel="stylesheet" type="text/css"
+	href="js/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="js/easyui/themes/icon.css">
+<script type="text/javascript" src="js/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="js/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="js/util/jquery.json.2.4.js"></script>
+</head>
+<body onload="onLoad()">
+	<div id="unlogin" style="padding: 0px">
+		<a href="#" class="easyui-linkbutton"  onclick="parent.login()">login</a>
+	</div>
+	<div id="logined" style="padding:0px;border:0px solid #ddd">
+		<div id="welcome" style="padding: 0px">
+			<a href="#" class="easyui-linkbutton"  onclick="parent.logout()">注销 操作员:<label id="name"></label></a>
+			<a href="#" class="easyui-linkbutton"  onclick="changeFrameSrc('发票管理','fapiao')">发票管理</a>
+			<a href="#" class="easyui-linkbutton"   onclick="">联系人</a>
+		</div>
+		
+	</div>
+	<script type="text/javascript">
+      function onLoad()
+      {
+    	  $.ajax({
+    		  url:"s/status",
+    		  success: processLoginStatus,
+    		  dataType: "json"
+    		});
+      }
+      function processLoginStatus(data)
+      {
+          var name=data.userName;
+          if(name=="anonymousUser")//un-login
+          {
+             
+              $("#logined").hide();
+          }
+          else//have logined
+           {
+        	  $("#unlogin").hide();
+        	  $("#name").html(name);
+            }
+         // alert(data.userName);
+      }
+      function changeFrameSrc(title,url)
+      {
+      	//$("#iframe_main",parent.document.body).attr("src",url);
+    	  parent.addPanel(title,url);
+      }
+	</script>
+</body>
+</html>

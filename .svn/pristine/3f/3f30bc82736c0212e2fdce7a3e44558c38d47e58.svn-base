@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>联系人</title>
+<link rel="stylesheet" type="text/css"
+	href="../js/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css"
+	href="../js/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="../js/easyui/demo/demo.css">
+<script type="text/javascript" src="../js/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="../js/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/easyui/datagrid-bufferview.js"></script>
+</head>
+<body>
+	<div>
+		<table id="dg" class="easyui-datagrid" title="联系人"
+			style="width: 960px; height: 500px"
+			data-options="view:bufferview,singleSelect:true,collapsible:false,url:'list',
+		fitColumns:false,rownumbers:true,showFooter:true,remoteSort:false,toolbar: '#toolbar',pageSize:30">
+			<thead>
+				<tr>
+					<!-- 编码kehuNo 名称kehuMc 电话kehuDh 联系人kehuXm 手机kehuSj
+				 传真kehuCz 备注kehuBz 全称kehuQc 税号kehuSh 禁用kehuIsopen   -->
+					<th data-options="field:'kehuNo',width:100" sortable="true">编码</th>
+					<th data-options="field:'kehuMc',width:100" sortable="true">名称</th>
+					<th data-options="field:'kehuDh',width:200" sortable="true">电话</th>
+					<th data-options="field:'kehuBz',width:200" sortable="true">备注</th>
+					<th data-options="field:'kehuXm',width:100" sortable="true">联系人</th>
+					<th data-options="field:'kehuSj',width:100" sortable="true">手机</th>
+					<th data-options="field:'kehuCz',width:100" sortable="true">传真</th>
+					<th data-options="field:'kehuQc',width:100" sortable="true">全称</th>
+					<th data-options="field:'kehuSh',width:100" sortable="true">税号</th>
+					<th data-options="field:'kehuIsopen',width:50" sortable="true">禁用</th>
+				</tr>
+			</thead>
+		</table>
+		<div id="toolbar" style="height: auto">
+			<input class="easyui-searchbox" data-options="prompt:'可搜索名称、电话、手机、传真、备注，然后回车',searcher:doSearch" style="width:400px"></input>
+		</div>
+	</div>
+	<script type="text/javascript">
+	   var errorCount=0;
+		function doSearch(value){
+			if (value=="") return false;
+		/*     $('#dg').datagrid('load', {  
+		    	mc:value
+		    });   */
+			$.ajax({
+				url: 'list',
+				type: 'POST',
+				data:{mc:value},
+				dataType: 'json',
+				timeout: 1000,
+				error: function(){
+					self.location.reload();//if error，refresh this page
+					},
+				success: function(result){
+					
+					 $('#dg').datagrid('loadData',result);
+                     }
+				});
+			}
+	</script>
+</body>
+</html>

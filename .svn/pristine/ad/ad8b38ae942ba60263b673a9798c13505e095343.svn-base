@@ -1,0 +1,20 @@
+package com.xym.bossed.service;
+
+import com.xym.bossed.interfaces.IKehuService;
+
+public class TestKehuService {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		new TestKehuService().testGetKehuNoByKehuSh();
+
+	}
+public void testGetKehuNoByKehuSh(){
+	IKehuService ks=new KehuService();
+	System.out.println(ks.getKehuNoByKehuSh("220106606092819"));
+	
+}
+
+}

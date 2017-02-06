@@ -1,0 +1,1 @@
+java -jar D:\Softwares\JAVA\MyBatis\mybatis-generator-core-1.3.1-bundle\mybatis-generator-core-1.3.1\lib\mybatis-generator-core-1.3.1.jar -configfile D:\Workspaces_MyEclipse\bossedPlug\src\main\resources\MybatisGeneratorConfig.xml

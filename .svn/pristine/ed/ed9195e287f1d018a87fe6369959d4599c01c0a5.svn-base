@@ -1,0 +1,47 @@
+function edit()
+	{
+		$('input').each(function(index){
+				if($(this).attr('name')!='kehuNo')
+				{
+					$(this).attr({'readonly':!$(this).attr('readonly')});
+				}
+			});
+		
+		$('#div_save').attr('hidden',!$('#div_save').attr('hidden'));
+	}
+	function submitForm(){
+		 $.messager.progress();
+		 $('#ff').form('submit', {
+			    contentType:"application/x-www-form-urlencoded; charset=utf-8",
+				onSubmit: function(){
+					var isValid = $(this).form('validate');
+					if (!isValid){
+						$.messager.progress('close');	// hide progress bar while the form is invalid
+					}
+					return isValid;	// return false will stop the form submission
+				},
+				success: function(data){
+					$.messager.progress('close');	// hide progress bar while submit successfully
+					if(data.indexOf("请输入用户名和密码")>-1)//未登录
+					{   self.location.reload();
+						return;
+					}
+					if(data.indexOf("Fail")>-1)//如果返回Fail
+					{
+						var json_data=$.secureEvalJSON(data);
+						//$.messager.alert('Info', json_data.Fail, 'info');
+							$.messager.alert('Info', json_data.Fail, 'info');
+							return;
+					}
+					
+					if(data.indexOf("success")>-1)//如果返回success
+					{
+						//showKehuWindow($.secureEvalJSON(data).success);
+					 	$.messager.alert('联系人',"更新成功",'info');
+						
+					}
+					
+				
+				}
+			}); 
+	 }

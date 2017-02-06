@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xym.bossed.db.mybatis.yshk.YSHKMapper">
+<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+<select id="getYSHKByKehuNo" resultType="com.xym.bossed.db.mybatis.yshk.YingShouHuoKuanBean" parameterType="java.lang.String">
+	select kehu_no as kehuNo,ysh_rq as yshRiQi,ysh_qc as yshQC,ysh_jf as yshJF,
+	ysh_df as yshDF,ysh_qm as yshQM  
+	from yshk_zz 
+	where kehu_no=#{bianHao}
+</select>
+</mapper>

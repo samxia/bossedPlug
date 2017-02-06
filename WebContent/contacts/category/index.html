@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Category</title>
+<link rel="stylesheet" type="text/css"
+	href="../../js/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css"
+	href="../../js/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css"
+	href="../../js/easyui/demo/demo.css">
+<script type="text/javascript" src="../../js/easyui/jquery.min.js"></script>
+<script type="text/javascript"
+	src="../../js/easyui/jquery.easyui.min.js"></script>
+</head>
+<body onload="onLoad()">
+	<div>
+		<a id="btn_add_brother" href="#" class="easyui-linkbutton"
+			data-options="iconCls:'icon-add'" onclick="addBrohterCategory()">增加同级类别</a>
+		<a id="btn_add_child" href="#" class="easyui-linkbutton"
+			data-options="iconCls:'icon-add'" onclick="addChildCategory()">增加下级类别</a> <a id="btn_remove"
+			href="#" class="easyui-linkbutton"
+			data-options="iconCls:'icon-cancel'"
+			onclick="deleteSelectedNode()">删除类别</a> <a id="btn_change"
+			href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit'" onclick="changeCategory()">修改类别</a>
+	</div>
+	<div style="margin: 10px 0;">
+		<ul class="easyui-tree"
+			data-options="url:'list',lines:true,animate:false,onSelect:onSelectFromTree,loadFilter:loadFilterFromTree"
+			style="width: 500px;" id="tree">
+		</ul>
+	</div>
+	<div id="win_add_brother" class="easyui-window" title="增加同级类别"
+		data-options="modal:true,closed:true,iconCls:'icon-add',onClose:onCloseFromWin"
+		style="width: 260px; height: 180px; padding: 10px;">
+		<table align="center">
+			<tr>
+				<td>类别代码:</td>
+				<td><input class="easyui-validatebox"
+					data-options="required:true,validType:'length[2,20]'"
+					id="add_input_code" /></td>
+			</tr>
+			<tr>
+				<td>类别名称:</td>
+				<td><input class="easyui-validatebox"
+					data-options="required:true,validType:'length[2,10]'"
+					id="add_input_name" /></td>
+			</tr>
+			<tr>
+				<td colspan="2"><a id="btn_submit_add" href="#"
+					class="easyui-linkbutton" data-options="iconCls:'icon-save'"
+					onclick="addCategorySubmit()">确定</a> <a id="btn_add_cancel"
+					href="#" class="easyui-linkbutton"
+					data-options="iconCls:'icon-cancel'"
+					onclick="$('#win_add_brother').window('close')">取消</a></td>
+			</tr>
+		</table>
+		<input type="hidden" id="hidden_input_add_type"/>
+	</div>
+	<script type="text/javascript">
+function loadFilterFromTree(data,parent)
+{
+	//alert(data.length);
+	//alert(data[0].id);
+	concatIdAndText(data);
+	return data;
+}
+// make id and text together , like 0001:child
+function concatIdAndText(data)
+{
+	for(var i=0;i<data.length;i++)
+	{
+		data[i].text=data[i].id+":"+data[i].text;
+		if(data[i].children.length>0)
+		{
+			concatIdAndText(data[i].children,parent);
+		}
+		
+	}
+	return data;
+	
+}
+function onCloseFromWin()
+{
+	$('#add_input_code').attr("disabled",false);
+}
+function changeCategory()
+{
+	$('#win_add_brother').window('open');
+	$('#hidden_input_add_type')[0].value="change";
+	
+	$('#add_input_code').attr("disabled",true);
+	
+	var node = $('#tree').tree('getSelected');
+	$('#add_input_code')[0].value=node.id;
+	$('#add_input_name')[0].value=node.text.split(":")[1];
+	
+}
+function addChildCategory()
+{
+	$('#win_add_brother').window('open');
+	$('#hidden_input_add_type')[0].value="child";
+	
+	var node = $('#tree').tree('getSelected');
+	var max=0;
+	var len_id=2;
+	var new_id;
+	var children=$('#tree').tree('getChildren',node.target);
+	if(children.length>0)
+	{   //get max id
+		for(var j=0;j<children.length;j++)
+		{
+			var id=(children[j].id)*1;
+			if(id>max)max=id;
+		}
+		//get the length of id
+		len_id=children[0].id.length;
+		new_id=max+1;
+		new_id=new_id.toFixed(0);//to string
+		var len_new_id=new_id.length;
+		//给id补零
+		for(var i=0;i<(len_id-len_new_id);i++)
+		{
+			new_id="0"+new_id;
+		}
+	}
+	else
+	{
+		new_id=node.id+"01";
+	}
+		
+	
+	$('#add_input_code')[0].value=new_id;
+}
+function addBrohterCategory()
+{	
+	$('#win_add_brother').window('open');
+	$('#hidden_input_add_type')[0].value="brother";
+	
+	var node = $('#tree').tree('getSelected');
+	var id=node.id;
+	//var name=node.text.split(":")[1];
+	var len_id=id.length;
+	var new_id=getMaxIdFromSelectedTree()+1;//to number
+    new_id=new_id.toFixed(0);//to string
+    var len_new_id=new_id.length;
+	//给id补零
+	for(var i=0;i<(len_id-len_new_id);i++)
+	{
+		new_id="0"+new_id;
+	}
+	$('#add_input_code')[0].value=new_id;
+	
+	//alert(new_id);
+}
+function getMaxIdFromSelectedTree()
+{
+	var node = $('#tree').tree('getSelected');
+	var parent=$('#tree').tree('getParent',node.target);
+	var max=0;
+	if(parent==null)
+	{
+		var roots=$('#tree').tree('getRoots');
+		for(var i=0;i<roots.length;i++)
+		{
+			var id=(roots[i].id)*1;
+			if(id>max)max=id;
+		}
+		return max;
+	}
+	
+	var children=$('#tree').tree('getChildren',parent.target);
+	for(var j=0;j<children.length;j++)
+	{
+		var id=(children[j].id)*1;
+		if(id>max)max=id;
+	}
+	return max;
+}
+function addCategorySubmit()
+{
+	if(!$('#add_input_code').validatebox("isValid")||!$('#add_input_name').validatebox("isValid"))
+	{return;}
+	$.ajax({
+		  type: 'POST',
+		  url: $('#hidden_input_add_type')[0].value=="change"?"update":"create",
+		  data: {code:$('#add_input_code')[0].value,name:$('#add_input_name')[0].value,
+			  parentCode:$('#hidden_input_add_type')[0].value=="brother"?getParentIdFromSelectedTree():getNodeIdFromSelectedTree},
+		  success: function(result){
+			  if(result==1)
+				  {
+					  $('#win_add_brother').window('close');
+					  $('#tree').tree("reload");
+					  disableLinkButton();
+				  }
+			  else{alert(result);}},
+		  dataType: "json"
+		});
+}
+function deleteSelectedNode()
+{
+	
+	var node = $('#tree').tree('getSelected');
+	$.messager.confirm('请确认','真的要删除类别['+node.text+']么?',function(r){  
+	    if (r){  
+	    	var id=node.id;
+	    	$.ajax({
+	    		  type: 'POST',
+	    		  url: "delete",
+	    		  data: {code:id},
+	    		  success: function(result){
+	    			 if(result==1)
+	    			  {
+	    				   $('#tree').tree("reload");
+	    				   disableLinkButton();
+	    			  }
+	    			  else
+		    		  {
+	    				  $.messager.alert("提示",result);
+		    		  }
+		    		  },
+	    		  dataType: "html"
+	    		});
+	    }  
+	});
+	
+}
+function getNodeIdFromSelectedTree()
+{
+	var node = $('#tree').tree('getSelected');
+	return node.id;
+}
+function getParentIdFromSelectedTree()
+{
+	var node = $('#tree').tree('getSelected');
+	var parent=$('#tree').tree('getParent',node.target);
+	var parent_id=null;
+	if(parent!=null)
+	{
+		return parent.id;
+	}
+	else
+	{return "";}
+}
+function getTreeSelectedState()
+{
+	var node = $('#tree').tree('getSelected');
+	if(node==null)
+	{
+		return null;	
+	}
+	
+	//alert($('#tree').tree('isLeaf',node));
+	alert($('#tree').tree('getParent',node.target));
+	
+}
+function onSelectFromTree()
+{
+	disableLinkButton();
+	var node = $('#tree').tree('getSelected');
+	if($('#tree').tree('isLeaf',node))
+	{
+		$('#btn_add_brother').linkbutton('enable');
+		$('#btn_add_child').linkbutton('enable');
+		$('#btn_remove').linkbutton('enable');
+		$('#btn_change').linkbutton('enable');
+	}
+	
+}
+function onLoad()
+{
+	disableLinkButton();
+	
+}
+function disableLinkButton()
+{
+	$('#btn_add_brother').linkbutton('disable');
+	$('#btn_add_child').linkbutton('disable');
+	$('#btn_remove').linkbutton('disable');
+	$('#btn_change').linkbutton('disable');
+}
+</script>
+
+</body>
+</html>

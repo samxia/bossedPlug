@@ -1,0 +1,41 @@
+package com.xym.bossed.service;
+
+import java.io.File;
+import java.util.List;
+
+import com.xym.bossed.db.mybatis.kehu.Kehu;
+import com.xym.bossed.db.mybatis.kehu.KehuDAO;
+import com.xym.bossed.db.mybatis.kehu.KehuExample;
+import com.xym.bossed.interfaces.IKehuService;
+
+public class KehuService implements IKehuService {
+	/* (non-Javadoc)
+	 * @see com.xym.bossed.service.IKehuService#getKehuNoByKehuSh(java.lang.String)
+	 */
+	@Override
+	public String getKehuNoByKehuSh(String kehuSh) {
+		KehuDAO dao = new KehuDAO();
+		KehuExample e = new KehuExample();
+		e.or().andKehuShEqualTo(kehuSh);
+		List<Kehu> list = dao.selectByExample(e);
+		for (int i = 0; i < list.size(); i++) {
+			Kehu kehu = list.get(i);
+			return kehu.getKehuNo();
+		}
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.xym.bossed.service.IKehuService#existKehuNo(java.lang.String)
+	 */
+	@Override
+	public boolean existKehuNo(String kehuNo) {
+		KehuDAO dao = new KehuDAO();
+		KehuExample e = new KehuExample();
+		e.or().andKehuNoEqualTo(kehuNo);
+		if (dao.countByExample(e) > 0) {
+			return true;
+		}
+		return false;
+	}
+}

@@ -1,0 +1,52 @@
+package com.xym.bossed.servlet.contact.category;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+import com.xym.bossed.db.mybatis.contact.category.ContactCategory;
+import com.xym.bossed.service.ContactCategoryService;
+import com.xym.bossed.web.jeasyui.TreeData;
+
+public class CategoryList extends HttpServlet {
+
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		this.doPost(request, response);
+	}
+
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		response.setContentType("text/html;charset=UTF-8");
+		
+		ContactCategoryService cs=new ContactCategoryService();
+		List<ContactCategory> list=cs.getAll();
+		if(list.size()==0)//if there is no any category
+		{
+			TreeData td=new TreeData();
+			td.setId("00");
+			td.setText("Root");
+			
+			
+			List<TreeData> list_child=new ArrayList();
+			list_child.add(new TreeData("0001","Child"));
+
+            td.setChildren(list_child);
+            JSONArray ja=new JSONArray();
+            ja.add(td);
+            response.getWriter().println(ja);
+			return;
+		}
+		response.getWriter().println(cs.makeTreeData(list));
+	}
+
+}

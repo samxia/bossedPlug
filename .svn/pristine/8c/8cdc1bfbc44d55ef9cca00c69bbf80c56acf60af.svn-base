@@ -1,0 +1,99 @@
+package com.xym.bossed.service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import net.sf.json.JSONArray;
+
+import com.xym.bossed.db.mybatis.contact.category.ContactCategory;
+import com.xym.bossed.db.mybatis.contact.category.ContactCategoryDAO;
+import com.xym.bossed.db.mybatis.contact.category.ContactCategoryExample;
+import com.xym.bossed.web.jeasyui.TreeData;
+
+public class ContactCategoryService {
+	public JSONArray makeTreeData(List<ContactCategory> list) {
+
+		JSONArray ja = new JSONArray();
+		// put the list to Map.
+		Map<String, TreeData> map = new TreeMap();
+		for (int i = 0; i < list.size(); i++) {
+			TreeData td = new TreeData();
+			ContactCategory cc = list.get(i);
+			td.setId(cc.getCode());
+			td.setText(cc.getName());
+			td.setParent_id(cc.getParentCode());
+
+			map.put(td.getId(), td);
+		}
+
+		
+		// set child
+		Collection<TreeData> c_td_1 = map.values();
+		Iterator<TreeData> it_1 = c_td_1.iterator();
+
+		while (it_1.hasNext()) {
+			TreeData td = it_1.next();
+			String parent_id = td.getParent_id();
+			if (parent_id != null && parent_id.trim().isEmpty() == false) {
+				TreeData parent = map.get(parent_id);
+				List<TreeData> list_td = parent.getChildren();
+				if (list_td == null) {
+					list_td = new ArrayList<TreeData>();
+				}
+				list_td.add(td);
+				parent.setChildren(list_td);
+			}
+
+			
+		}
+		
+		Iterator<TreeData> it=c_td_1.iterator();
+		while(it.hasNext())
+		{
+			TreeData td=it.next();
+			// add to jsonobject
+			if (td.getParent_id() == null || td.getParent_id().trim().isEmpty()) {
+				ja.add(td);
+			}
+		}
+		return ja;
+	}
+
+	public int countByParentCode(String parentCode) {
+		ContactCategoryDAO dao = new ContactCategoryDAO();
+		ContactCategoryExample ce=new ContactCategoryExample();
+		ce.or().andParentCodeEqualTo(parentCode);
+		return dao.countByExample(ce);
+	}
+
+	public List<ContactCategory> getAll() {
+		ContactCategoryDAO dao = new ContactCategoryDAO();
+		ContactCategoryExample e=new ContactCategoryExample();
+		e.setOrderByClause("code");
+		return dao.selectByExample(e);
+	}
+
+	public int update(ContactCategory record) {
+		ContactCategoryDAO dao = new ContactCategoryDAO();
+		ContactCategoryExample example = new ContactCategoryExample();
+		example.or().andCodeEqualTo(record.getCode());
+		return dao.updateByExampleSelective(record, example);
+	}
+
+	public int delete(ContactCategory record) {
+		ContactCategoryDAO dao = new ContactCategoryDAO();
+		ContactCategoryExample example = new ContactCategoryExample();
+		example.or().andCodeEqualTo(record.getCode());
+		return dao.deleteByExample(example);
+	}
+
+	public int create(ContactCategory record) {
+		ContactCategoryDAO dao = new ContactCategoryDAO();
+		return dao.insertSelective(record);
+	}
+}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Welcome</title>
+<link rel="stylesheet" type="text/css"
+	href="js/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="js/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="js/easyui/demo/demo.css">
+<script type="text/javascript" src="js/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="js/easyui/jquery.easyui.min.js"></script>
+<style type="text/css">
+	.fixed{
+		   /*  background-color: #E0ECFF; */
+			width:100%;
+			position:fixed;
+			z-index:99;
+			left:0px;
+			top:0px;
+			filter:alpha(Opacity=80);
+			-moz-opacity:0.5;
+			opacity: 0.5;
+			background-color:#ffffff;
+	}
+</style>
+</head>
+<body onload="onLoad()" style="padding: 0px">
+    	<div data-options="region:'north'" style="height: 25px;" class="fixed">
+			<iframe id="iframe_north" src="" width="100%" height="100%"
+				marginheight="0" marginwidth="0" scrolling="no" frameborder="no"
+				align="middle"></iframe>
+
+		</div> 
+		
+		<div data-options="region:'center'" style="padding: 30px">
+			<!-- 	<iframe id="iframe_main" src="" width="100%"
+				height="800px" marginheight="0" marginwidth="0" scrolling="no"
+				frameborder="no" align="middle"></iframe> -->
+			<div id="tab_main" class="easyui-tabs" data-options="tools:'#tab-tools'" 
+				style="width: 1200px; height: auto">
+				<div title="首页" style="padding: 10px">
+					<iframe id="iframe_main" src="" width="100%" height="800px"
+						marginheight="0" marginwidth="0" scrolling="no" frameborder="no"
+						align="middle"></iframe>
+				</div>
+			</div>
+		</div>
+		<div id="tab-tools">
+			<label id="authority"></label>
+		</div>
+		<script type="text/javascript">
+	 var index = 0;//global var for tabs
+	 function addPanel(title,url){
+		 //before add,check if has existed this tab,if so ,show.
+		if($('#tab_main').tabs('exists',title)) 
+		{
+			$('#tab_main').tabs('select',title);
+			return;
+		};
+		 index++;
+		 $('#tab_main').tabs('add',{
+		 title: title,
+		 content: '<iframe id="iframe_tab_'+index+'" src="" width="100%" height="800px" marginheight="0" marginwidth="0" scrolling="no"	frameborder="no" align="middle"></iframe>',
+		 closable: true
+	 });
+		 $("#iframe_tab_"+index).attr("src",url);
+	 }
+	function onLoad()
+	{
+		$("#iframe_north").attr("src","menu.html");
+		$("#iframe_main").attr("src","welcome_main.html");
+	}
+    function login()
+    {
+       // alert("test ok");
+    	//$('#w_login').window('open');
+    	//alert(location.pathname);
+    	//alert(location.href);
+    	location.replace("login/login.jsp");
+    }
+    function logout()
+    {
+    	location.replace("logout");
+    }
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+var DgSaleItemUI={
+		//DgSaleItemUI.createNew()
+		createNew:function()
+		{
+			var dgSaleItemUI={};
+			//edit all rows
+			dgSaleItemUI.editAllRows=function(){
+				
+				var rows=$('#datagird_sale_item').datagrid('getRows');
+				for(var i=0;i<rows.length;i++)
+				{
+				  $('#datagird_sale_item').datagrid('beginEdit', i);
+				  SaleItemUI.setEditingForCaculation(i);
+				}
+			};
+			//End edit all rows
+			dgSaleItemUI.endEditAllRows=function(){
+				
+				var rows=$('#datagird_sale_item').datagrid('getRows');
+				for(var i=0;i<rows.length;i++)
+				{
+				  $('#datagird_sale_item').datagrid('endEdit', i);
+				}
+			};
+			//caculate suliang*price=amount
+			dgSaleItemUI.setEditingForCaculation=function(rowIndex)
+			{
+				var editor_shuLiang = $('#datagird_sale_item').datagrid('getEditor', {index:rowIndex,field:'shuLiang'});
+				var editor_price=$('#datagird_sale_item').datagrid('getEditor', {index:rowIndex,field:'buHanShuiDanJia'});
+				var editor_amount=$('#datagird_sale_item').datagrid('getEditor', {index:rowIndex,field:'buHanShuiJinE'});
+				
+				editor_shuLiang.target.bind('change',function(){
+					calculateByShuliangAndPrice();
+					dgSaleItemUI.caculateFooter();//refresh footer
+				});
+				editor_price.target.bind('change',function(){
+					calculateByShuliangAndPrice();
+					dgSaleItemUI.caculateFooter();//refresh footer
+				});
+				editor_amount.target.bind('change',function(){
+					calculateByAmountAndShuLiang();
+					dgSaleItemUI.caculateFooter();//refresh footer
+				});
+				
+				 function calculateByShuliangAndPrice(){
+					 var amount=editor_shuLiang.target.val()*editor_price.target.val();
+					 $(editor_amount.target).numberbox('setValue',amount);
+				 }
+				 //calc price=amount/shuliang
+				 function calculateByAmountAndShuLiang()
+				 {
+					 if(editor_shuLiang.target.val()==0)
+					 {
+						 return;
+					 }
+					 var price=editor_amount.target.val()/editor_shuLiang.target.val();
+					 $(editor_price.target).numberbox('setValue',price);
+				 }
+				
+			     
+			};
+			//calculate amount
+			dgSaleItemUI.caculateFooter=function()
+			{
+				var rows=$('#datagird_sale_item').datagrid('getRows');
+				var count=rows.length;
+				var sum_shuLiang=0,sum_jinE=0;
+				for(var i=0;i<count;i++)
+				{
+					sum_shuLiang=sum_shuLiang-(-$('#datagird_sale_item').datagrid('getEditor', {index:i,field:'shuLiang'}).target.val());
+					sum_jinE=sum_jinE-(-$('#datagird_sale_item').datagrid('getEditor', {index:i,field:'buHanShuiJinE'}).target.val());
+				}
+				dgSaleItemUI.setFooterUI(count,sum_shuLiang,sum_jinE);
+				
+			};
+			//set footer UI
+			dgSaleItemUI.setFooterUI=function(count,sum_shuLiang,sum_jinE)
+			{
+				//getFooterRows
+				var footers=$('#datagird_sale_item').datagrid('getFooterRows');
+				if(footers==null)
+				{return;}
+				var footer=footers[0];
+				footer['mingCheng']="记录数："+count;
+				footer['shuLiang']=sum_shuLiang;
+				footer['buHanShuiJinE']=sum_jinE;
+					
+				$('#datagird_sale_item').datagrid('reloadFooter');
+			}
+			
+			//onLoadSuccess
+			dgSaleItemUI.onLoadSuccess=function()
+			{
+				dgSaleItemUI.editAllRows();
+				dgSaleItemUI.caculateFooter();
+				
+			}
+			return dgSaleItemUI;
+		}
+}

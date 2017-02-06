@@ -1,0 +1,16 @@
+var DgSaleItemUI={
+		//DgSaleItemUI.createNew()
+		createNew:function()
+		{
+			var dgSaleItemUI={};
+			dgSaleItemUI.editAllRows=function(){
+				
+				var rows=$('#datagird_sale_item').datagrid('getRows');
+				for(var i=0;i<rows.length;i++)
+				{
+				  $('#datagird_sale_item').datagrid('beginEdit', i);
+				}
+			};
+			return dgSaleItemUI;
+		}
+}

@@ -1,0 +1,134 @@
+package com.xym.bossed.servlet.fapiao;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONObject;
+
+import org.apache.log4j.Logger;
+
+
+import com.xym.bossed.db.mybatis.fapiao.FaPiao;
+import com.xym.bossed.service.FaPiaoService;
+
+/**
+ * Servlet implementation class FapiaoSearch
+ */
+public class FapiaoSearch extends HttpServlet {
+
+	private static final long serialVersionUID = 1L;
+	static Logger log = Logger.getLogger(FapiaoSearch.class);
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public FapiaoSearch() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		this.doPost(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html;charset=UTF-8");
+		FaPiaoService fs = new FaPiaoService();
+		List<FaPiao> allFapiao = null;
+		/**
+		 * get param
+		 */
+		String str_startDate = request.getParameter("date_start");
+		String str_endDate = request.getParameter("date_end");
+		String str_state = request.getParameter("state");
+
+		if (str_startDate != null && str_endDate != null) {
+			Date start = null, end = null;
+			try {
+				start = new SimpleDateFormat("yyyy-MM-dd").parse(str_startDate);
+				end = new SimpleDateFormat("yyyy-MM-dd").parse(str_endDate);
+				log.debug(start.toString() + end.toString());
+			} catch (ParseException e) {
+
+				e.printStackTrace();
+			}
+			allFapiao = fs.listFapiaoByDate(start, end, str_state);
+		} else {
+			// allFapiao = fs.listAllFapiao();//if no start date and end date
+			// param,return all;
+			return;
+		}
+
+		JSONObject jo = new JSONObject();
+		jo.put("total", allFapiao.size());
+		jo.put("rows", allFapiao);
+
+		// make footer
+		List<Footer> lf = new ArrayList();
+		Footer footer = new Footer();
+		footer.setKehuNo("(记录数" + String.valueOf(allFapiao.size()) + "）");// 共 个
+		BigDecimal sum = BigDecimal.ZERO;
+		for (int i = 0; i < allFapiao.size(); i++) {
+			Object o = allFapiao.get(i);
+			FaPiao fp = (FaPiao) o;
+			sum = sum.add(fp.getKaipDfje());
+		}
+		footer.setKaipDfje(String.valueOf(sum));
+		lf.add(footer);
+
+		jo.put("footer", lf);
+
+		response.getWriter().println(jo.toString());
+	}
+
+	public class Footer {
+		private String kaipNo = "合计:";// 合计：
+		private String kehuNo;// 共？条记录
+		private String kaipDfje;// 开票总金额
+
+		public String getKaipNo() {
+			return kaipNo;
+		}
+
+		public void setKaipNo(String kaipNo) {
+			this.kaipNo = kaipNo;
+		}
+
+		public String getKehuNo() {
+			return kehuNo;
+		}
+
+		public void setKehuNo(String kehuNo) {
+			this.kehuNo = kehuNo;
+		}
+
+		public String getKaipDfje() {
+			return kaipDfje;
+		}
+
+		public void setKaipDfje(String kaipDfje) {
+			this.kaipDfje = kaipDfje;
+		}
+
+	}
+}

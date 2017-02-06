@@ -1,0 +1,21 @@
+package com.xym.bossed.service;
+
+import com.xym.bossed.db.mybatis.log.Log;
+
+public class TestLogService {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		new TestLogService().testCreateLog();
+	}
+	public void testCreateLog()
+	{
+		LogService ls=new LogService();
+		Log log=new Log("web_picture","xym","createFile",null,"something.jpg","success");
+		
+		ls.createLog(log);
+	}
+
+}
