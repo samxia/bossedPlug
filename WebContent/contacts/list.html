@@ -14,15 +14,15 @@
 <script type="text/javascript" src="../js/contact/list_tree.js"></script>
 </head>
 <body>
-<div id="id_layout" class="easyui-layout" style="width:1100px;" data-options="fit:true">
-	<div data-options="region:'west',split:true" style="width:150px;">
+<div id="id_layout" class="easyui-layout" style="width:auto;" data-options="fit:true">
+	<div data-options="region:'west',split:true" style="width:100px;">
  	<ul id="id_tree" class="easyui-tree" data-options="lines:true,animate:true,onSelect:onSelectFromTree,onContextMenu:onContextMenuFromTree,url:'category/tree'" >  
     </ul>  
 	</div>  
-    <div data-options="region:'center'" style="width:950px;">
+    <div data-options="region:'center'" style="width:auto;">
     	<div>
 		<table id="dg" class="easyui-datagrid" title="联系人"
-			style="width: 960px; height: 500px"
+			style="width: auto; height: 500px"
 			data-options="view:bufferview,singleSelect:true,collapsible:false,url:'list',
 		fitColumns:false,rownumbers:true,showFooter:true,remoteSort:false,toolbar: '#toolbar',
 		pageSize:30,onDblClickRow:onDblClickRow,rowStyler:rowStyler,onRowContextMenu:onRowContextMenu">
@@ -33,23 +33,23 @@
 				    <th data-options="field:'picCount',width:30,formatter:picCountFormatter" sortable="true">图片</th>
 					<th data-options="field:'kehuNo',width:100" sortable="true">编码</th>
 					<th data-options="field:'kehuMc',width:140" sortable="true">名称</th>
-					<th data-options="field:'kehuDh',width:250" sortable="true">电话</th>
+					<th data-options="field:'kehuDh',width:200" sortable="true">电话</th>
 					<th data-options="field:'kehuBz',width:200" sortable="true">备注</th>
-					<th data-options="field:'kehuXm',width:100" sortable="true">联系人</th>
+					<th data-options="field:'kehuXm',width:100" hidden="true" sortable="true">联系人</th>
 					<th data-options="field:'kehuSj',width:100" sortable="true">手机</th>
 					<th data-options="field:'kehuCz',width:100" sortable="true">传真</th>
 					<th data-options="field:'kehuQc',width:100" sortable="true">全称</th>
 					<th data-options="field:'kehuSh',width:100" sortable="true">税号</th>
-					<th data-options="field:'kehuIsopen',width:50" sortable="true">禁用</th>
-					<th data-options="field:'kehulbDm',width:50" sortable="true">代码</th>
-					<th data-options="field:'kehulbMc',width:50" sortable="true">类别</th>
+					<th data-options="field:'kehuIsopen',width:100" sortable="true">禁用</th>
+					<th data-options="field:'kehulbDm',width:100" sortable="true">代码</th>
+					<th data-options="field:'kehulbMc',width:100" sortable="true">类别</th>
 				</tr>
 			</thead>
 		</table>
 		<div id="toolbar" style="height: 40px">
 			<input class="easyui-searchbox"
 				data-options="prompt:'可搜索名称、电话、手机、传真、备注，然后回车或(Alt+s)',searcher:doSearch"
-				style="width: 400px" id="search_box"></input>
+				style="width: 300px" id="search_box"></input>
 				<a href="#"	class="easyui-linkbutton" onclick="doSearch($('#search_box').searchbox('textbox')[0].value)">
 				查询(<U>S</U>) 
 				</a>
@@ -77,11 +77,11 @@
 	    
 	</div>
 	<div>
-	 <div id="id_menu" class="easyui-menu" style="width:120px;">
+	 <div id="id_menu" class="easyui-menu" style="width:100px;">
 		<div onclick="javascript:deleteKehu()">删除</div>
 		<div>
 		   <span>转到</span>
-		   <div style="width:150px;">  
+		   <div style="width:100px;">  
                <div onclick="javascript:changeKehuXz(1)">客户</div>
                <div onclick="javascript:changeKehuXz(2)">供应商</div>
                <div onclick="javascript:changeKehuXz(3)">博士德外</div>

@@ -12,6 +12,14 @@
 <link rel="stylesheet" type="text/css"
 	href="../js/easyui/themes/icon.css">
 <link rel="stylesheet" type="text/css" href="../js/easyui/demo/demo.css">
+<style type="text/css">
+.searchbox{
+	margin-bottom: -15px;
+}
+.searchbox .searchbox-text{
+	font-size:20px;
+}
+</style>
 <script type="text/javascript" src="../js/easyui/jquery.min.js"></script>
 <script type="text/javascript" src="../js/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="../js/easyui/datagrid-bufferview.js"></script>
@@ -21,15 +29,15 @@
 <div style="display:none;"> 
 	<input type="hidden" id="id_perms_contacts_create" value=<%=SecurityUtils.getSubject().isPermitted("contacts:create")%>>
 </div>
-<div id="id_layout" class="easyui-layout" style="width:1100px;" data-options="fit:true">
-	<div data-options="region:'west',split:true" style="width:150px;">
+<div id="id_layout" class="easyui-layout" style="width:650px;" data-options="fit:true">
+	<!-- <div data-options="region:'west',split:false" style="width:150px;">
  	<ul id="id_tree" class="easyui-tree" data-options="lines:true,animate:true,onSelect:onSelectFromTree,onContextMenu:onContextMenuFromTree,url:'category/tree'" >  
     </ul>  
-	</div>  
-    <div data-options="region:'center'" style="width:950px;">
+	</div>   -->
+    <div data-options="region:'center'" style="width:100%;">
     	<div>
 		<table id="dg" class="easyui-datagrid" title="联系人"
-			style="width: 960px; height: 500px"
+			style="width:640px; height:560px"
 			data-options="view:bufferview,singleSelect:true,collapsible:false,url:'list',
 		fitColumns:false,rownumbers:true,showFooter:true,remoteSort:false,toolbar: '#toolbar',
 		pageSize:30,onDblClickRow:onDblClickRow,rowStyler:rowStyler,onRowContextMenu:onRowContextMenu">
@@ -38,45 +46,47 @@
 					<!-- 编码kehuNo 名称kehuMc 电话kehuDh 联系人kehuXm 手机kehuSj
 				 传真kehuCz 备注kehuBz 全称kehuQc 税号kehuSh 禁用kehuIsopen   -->
 				    <th data-options="field:'picCount',width:30,formatter:picCountFormatter" sortable="true">图片</th>
-					<th data-options="field:'kehuNo',width:100" sortable="true">编码</th>
-					<th data-options="field:'kehuMc',width:140" sortable="true">名称</th>
-					<th data-options="field:'kehuDh',width:250" sortable="true">电话</th>
+					<th data-options="field:'kehuNo',width:100,hidden:true" sortable="true">编码</th>
+					<th data-options="field:'kehuMc',width:140,halign:'center'" sortable="true">名称</th>
+					<th data-options="field:'kehuDh',width:250,halign:'center'" sortable="true">电话</th>
+					<th data-options="field:'kehuSj',width:100,halign:'center'" sortable="true">手机</th>
 					<th data-options="field:'kehuBz',width:200" sortable="true">备注</th>
-					<th data-options="field:'kehuXm',width:100" sortable="true">联系人</th>
-					<th data-options="field:'kehuSj',width:100" sortable="true">手机</th>
-					<th data-options="field:'kehuCz',width:100" sortable="true">传真</th>
-					<th data-options="field:'kehuQc',width:100" sortable="true">全称</th>
-					<th data-options="field:'kehuSh',width:100" sortable="true">税号</th>
-					<th data-options="field:'kehuIsopen',width:50" sortable="true">禁用</th>
-					<th data-options="field:'kehulbDm',width:50" sortable="true">代码</th>
-					<th data-options="field:'kehulbMc',width:50" sortable="true">类别</th>
+					<th data-options="field:'kehuXm',width:100,hidden:true" sortable="true">联系人</th>
+					<th data-options="field:'kehuCz',width:100,hidden:true" sortable="true">传真</th>
+					<th data-options="field:'kehuQc',width:100,hidden:true" sortable="true">全称</th>
+					<th data-options="field:'kehuSh',width:100,hidden:true" sortable="true">税号</th>
+					<th data-options="field:'kehuIsopen',width:50,hidden:true" sortable="true">禁用</th>
+					<th data-options="field:'kehulbDm',width:50,hidden:true" sortable="true">代码</th>
+					<th data-options="field:'kehulbMc',width:50,hidden:true" sortable="true">类别</th>
 				</tr>
 			</thead>
 		</table>
 		<div id="toolbar" style="height: 40px">
 			<input class="easyui-searchbox"
-				data-options="prompt:'可搜索名称、电话、手机、传真、备注，然后回车或(Alt+s)',searcher:doSearch"
-				style="width: 400px" id="search_box"></input>
+				data-options="prompt:'名称、电话、手机、传真、备注，然后回车或(Alt+s)',searcher:doSearch,height:40,width:200"
+				 id="search_box"></input>
+				 
 				<a href="#"	class="easyui-linkbutton" onclick="doSearch($('#search_box').searchbox('textbox')[0].value)">
 				查询(<U>S</U>) 
 				</a>
-			<a href="#"	class="easyui-linkbutton" data-options="plain:true" onclick="setValForGroupbutton(0)">
-				<input type="radio" name="kehuxz" id="check_all" value="0" checked="checked">全部(<U>A</U>)</input>
-			</a>
-			<a href="#"	class="easyui-linkbutton" data-options="plain:true" onclick="setValForGroupbutton(1)">
-			 <input type="radio" name="kehuxz" id="check_kehu" value="1">客户(<U>K</U>)</input>
-			 </a>
-			 <a href="#"	class="easyui-linkbutton" data-options="plain:true" onclick="setValForGroupbutton(2)">
-			<input type="radio" name="kehuxz" id="check_gy" value="2">供应商(<U>G</U>)</input>
-			</a>
-			<a href="#"	class="easyui-linkbutton" data-options="plain:true" onclick="setValForGroupbutton(3)">
-			<input type="radio" name="kehuxz" id="check_rest" value="3">博士德以外(<U>Q</U>)</input>
-			</a>
+				<a href="#"	class="easyui-linkbutton" data-options="plain:true" onclick="setValForGroupbutton(0)">
+					<input type="radio" name="kehuxz" id="check_all" value="0" checked="checked">全部(<U>A</U>)</input>
+				</a>
+				<a href="#"	class="easyui-linkbutton" data-options="plain:true" onclick="setValForGroupbutton(1)">
+				 <input type="radio" name="kehuxz" id="check_kehu" value="1">客户(<U>K</U>)</input>
+				 </a>
+				 <a href="#"	class="easyui-linkbutton" data-options="plain:true" onclick="setValForGroupbutton(2)">
+				<input type="radio" name="kehuxz" id="check_gy" value="2">供应商(<U>G</U>)</input>
+				</a>
+				<a href="#"	class="easyui-linkbutton" data-options="plain:true" onclick="setValForGroupbutton(3)">
+				<input type="radio" name="kehuxz" id="check_rest" value="3">博士德以外(<U>Q</U>)</input>
+				</a>
+			
 		</div>
 	</div>
 	<div>
-		<div id="win_detail" class="easyui-window" title="联系人" style="width:850px;height:580px"  
-		       data-options="iconCls:'icon-search',modal:true,closed:true,onClose:onClose_win_detail,minimizable:false">  
+		<div id="win_detail" class="easyui-window" title="联系人" style="width:650px;height:550px"  
+		       data-options="iconCls:'icon-search',modal:true,closed:true,onClose:onClose_win_detail,minimizable:false,resizable:false,maximizable:false,draggable:true,collapsible:false">  
 		 <iframe id="iframe_detail" src="" width="100%"
 				height="100%" marginheight="0" marginwidth="0" scrolling="no"
 				frameborder="no" align="middle"></iframe>

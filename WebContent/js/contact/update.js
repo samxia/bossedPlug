@@ -1,4 +1,7 @@
 function edit() {
+	
+
+	
 	// cacel the readonly attr to false
 	$('input').each(function(index) {
 		if ($(this).attr('name') != 'kehuNo') {
@@ -6,7 +9,18 @@ function edit() {
 				'readonly' : !$(this).attr('readonly')
 			});
 		}
+		
+		
+		if($(this).attr('readonly'))
+		{
+			$(this).css("border","none");
+		}
+		else
+		{
+			$(this).css("border","1px solid");
+		}
 	});
+	
 	// show save and reset button
 	$('#div_save').attr('hidden', !$('#div_save').attr('hidden'));
 

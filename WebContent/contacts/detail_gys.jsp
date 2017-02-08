@@ -18,10 +18,10 @@
 <script type="text/javascript" src="../js/contact/update.js"></script>
 </head>
 <body onload="onLoad()">
-	<div class="easyui-panel" title="供应商" style="width: 800px" data-options="iconCls:'icon-search',tools:'#tt'">
-		<div style="padding: 1px 0 10px 60px">
+	<div class="easyui-panel" title="供应商" style="width: 600px" data-options="iconCls:'icon-search',tools:'#tt'">
+		<div style="padding: 2px 0px 0px 10px">
 			<form id="ff" method="post" action="update">
-				<div class="easyui-panel" title="基本信息" style="width: 700px">
+				<div class="easyui-panel" title="基本信息" style="width: 580px">
 					<table>
 						<tr>
 							<td>编号:</td>
@@ -45,7 +45,7 @@
 						</tr>
 					</table>
 				</div>
-				<div class="easyui-panel" title="通讯信息" style="width: 700px">
+				<div class="easyui-panel" title="通讯信息" style="width: 580px">
 					<table>
 						<tr>
 							<td>邮编:</td>
@@ -76,7 +76,7 @@
 						</tr>
 					</table>
 				</div>
-				<div class="easyui-panel" title="经营信息" style="width: 700px">
+				<div class="easyui-panel" title="经营信息" style="width: 580px">
 					<table>
 						<tr>
 							<td>全称:</td>
@@ -104,7 +104,7 @@
 						</tr>
 					</table>
 				</div>
-				<div class="easyui-panel" title="扩展属性" style="width: 700px">
+				<div class="easyui-panel" title="扩展属性" style="width: 580px">
 					<table>
 						<tr>
 							<td>应付款余额:</td>

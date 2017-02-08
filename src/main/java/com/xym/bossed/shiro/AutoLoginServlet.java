@@ -56,8 +56,8 @@ public class AutoLoginServlet extends HttpServlet {
 			CaptchaUsernamePasswordToken token = new CaptchaUsernamePasswordToken(
 					user.getUserName(), password, true, "AUTO_LOGIN_HOST",
 					"AUTO_LOGIN_CAPTCHA");
-			subject.login(token);// µÇÂ¼
-			response.sendRedirect(request.getContextPath());
+			subject.login(token);// µÇÂ¼		
+			response.sendRedirect(request.getContextPath());		
 			return;
 		}
 		else
